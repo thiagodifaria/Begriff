@@ -1,0 +1,83 @@
+IDENTIFICATION DIVISION.
+       PROGRAM-ID. TRANSACTION-PROCESSOR.
+       AUTHOR. Gemini.
+
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT TRANSACTION-IN ASSIGN TO DYNAMIC WS-INPUT-FILENAME
+               ORGANIZATION IS SEQUENTIAL
+               ACCESS MODE IS SEQUENTIAL
+               RECORD IS BINARY SEQUENTIAL
+               FILE STATUS IS FS-TRANSACTION-IN.
+           SELECT REPORT-OUT ASSIGN TO DYNAMIC WS-OUTPUT-FILENAME
+               ORGANIZATION IS LINE SEQUENTIAL
+               ACCESS MODE IS SEQUENTIAL
+               FILE STATUS IS FS-REPORT-OUT.
+
+       DATA DIVISION.
+       FILE SECTION.
+       FD  TRANSACTION-IN
+           RECORD CONTAINS 59 CHARACTERS
+           DATA RECORD IS TRANSACTION-RECORD.
+       01  TRANSACTION-RECORD.
+           COPY "transaction_record.cpy".
+
+       FD  REPORT-OUT.
+       01  REPORT-RECORD.
+           05 RP-TOTAL-TRANSACTIONS   PIC 9(8).
+           05 FILLER                  PIC X(1) VALUE ','.
+           05 RP-TOTAL-AMOUNT         PIC S9(13)V99.
+
+       WORKING-STORAGE SECTION.
+       01  WS-WORK-AREAS.
+           05 WS-EOF                  PIC A(1) VALUE 'N'.
+           05 WS-COUNTER              PIC 9(8) VALUE 0.
+           05 WS-TOTAL-AMOUNT         PIC S9(13)V99 VALUE 0.
+
+       01  FILE-STATUS-CODES.
+           05 FS-TRANSACTION-IN       PIC X(2).
+           05 FS-REPORT-OUT           PIC X(2).
+
+       01  COMMAND-LINE-ARGS.
+           05 WS-INPUT-FILENAME       PIC X(100).
+           05 WS-OUTPUT-FILENAME      PIC X(100).
+
+       PROCEDURE DIVISION.
+       MAIN-PROCEDURE.
+           ACCEPT WS-INPUT-FILENAME FROM COMMAND-LINE
+           ACCEPT WS-OUTPUT-FILENAME FROM COMMAND-LINE
+
+           OPEN INPUT TRANSACTION-IN
+           OPEN OUTPUT REPORT-OUT
+
+           IF FS-TRANSACTION-IN NOT = "00"
+              DISPLAY "Error opening input file: " FS-TRANSACTION-IN
+              STOP RUN 1
+           END-IF
+
+           IF FS-REPORT-OUT NOT = "00"
+              DISPLAY "Error opening output file: " FS-REPORT-OUT
+              STOP RUN 1
+           END-IF
+
+           PERFORM UNTIL WS-EOF = 'Y'
+               READ TRANSACTION-IN
+                   AT END
+                       SET WS-EOF TO 'Y'
+                   NOT AT END
+                       ADD 1 TO WS-COUNTER
+                       ADD TR-AMOUNT TO WS-TOTAL-AMOUNT
+               END-READ
+           END-PERFORM
+
+           MOVE WS-COUNTER TO RP-TOTAL-TRANSACTIONS
+           MOVE WS-TOTAL-AMOUNT TO RP-TOTAL-AMOUNT
+
+           WRITE REPORT-RECORD
+
+           CLOSE TRANSACTION-IN
+           CLOSE REPORT-OUT
+
+           STOP RUN.
+       END PROGRAM TRANSACTION-PROCESSOR.

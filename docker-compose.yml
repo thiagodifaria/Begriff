@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+    ports:
+      - "5432:5432"
+    networks:
+      - begriff_network
+
+  api_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    volumes:
+      - ./src:/app/src
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - gateway_server
+    networks:
+      - begriff_network
+
+  gateway_server:
+    build:
+      context: ./src/infra/gateways/performance_gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    networks:
+      - begriff_network
+
+networks:
+  begriff_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
