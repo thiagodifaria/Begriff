@@ -28,7 +28,7 @@ Begriff é uma plataforma empresarial completa de inteligência financeira, cuja
 
 ## 🚀 Funcionalidades Avançadas
 
-### ✅ Funcionalidades Implementadas (V1.0)
+### ✅ Funcionalidades Implementadas (V1.5.0)
 
 - ✅ **Pipeline Híbrido Completo**: Fluxo end-to-end Python → C++ → COBOL 100% operacional
 - ✅ **Sistema de Identidade Seguro**: Autenticação JWT com bcrypt e proteção de rotas
@@ -79,7 +79,7 @@ Begriff é uma plataforma empresarial completa de inteligência financeira, cuja
 
 ## 📊 Capacidades de Análise Avançada
 
-### Gêmeos Digitais Funcionais (Implementado v1.5)
+### Gêmeos Digitais Funcionais (Implementado v1.5.0)
 ```
 Simulação Monte Carlo Real:
 ├─ Engine: NumPy nativo para performance
@@ -516,11 +516,11 @@ services:
 
 ## 🔄 Roadmap de Desenvolvimento
 
-## 🎯 Estado Atual do Projeto (v1.5)
+## 🎯 Estado Atual do Projeto (v1.5.0)
 
 O Begriff é atualmente um **backend robusto, funcional e arquiteturalmente validado**. A fase de construção da fundação foi concluída e o sistema passou por um rigoroso processo de análise, refatoração e correção que solidificou sua estrutura e eliminou falhas críticas.
 
-### Conquistas Técnicas v1.5
+### Conquistas Técnicas v1.5.0
 
 #### 🚀 Pipeline Híbrido Refatorado
 - **Arquitetura de Pipes**: Eliminação completa de I/O de disco entre C++ e COBOL
@@ -569,7 +569,7 @@ O Begriff é atualmente um **backend robusto, funcional e arquiteturalmente vali
 
 ## 📈 Performance
 
-### Métricas Atuais (V1.0)
+### Métricas Atuais (V1.5.0)
 
 ```
 Pipeline Híbrido:
@@ -579,7 +579,7 @@ Pipeline Híbrido:
 └─ Disponibilidade: 99.9%
 
 Detecção de Fraude:
-├─ Precisão: 95%+ (V1.0)
+├─ Precisão: 95%+ (V1.5.0)
 ├─ Tempo de Resposta: <10ms
 ├─ False Positives: <2%
 └─ Target V2.0: 98%+ precisão
