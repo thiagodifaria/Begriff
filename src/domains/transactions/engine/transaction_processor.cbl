@@ -5,12 +5,11 @@ IDENTIFICATION DIVISION.
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-           SELECT TRANSACTION-IN ASSIGN TO DYNAMIC WS-INPUT-FILENAME
+           SELECT TRANSACTION-IN ASSIGN TO KEYBOARD
                ORGANIZATION IS SEQUENTIAL
                ACCESS MODE IS SEQUENTIAL
-               RECORD IS BINARY SEQUENTIAL
                FILE STATUS IS FS-TRANSACTION-IN.
-           SELECT REPORT-OUT ASSIGN TO DYNAMIC WS-OUTPUT-FILENAME
+           SELECT REPORT-OUT ASSIGN TO DISPLAY
                ORGANIZATION IS LINE SEQUENTIAL
                ACCESS MODE IS SEQUENTIAL
                FILE STATUS IS FS-REPORT-OUT.
@@ -25,59 +24,66 @@ IDENTIFICATION DIVISION.
 
        FD  REPORT-OUT.
        01  REPORT-RECORD.
-           05 RP-TOTAL-TRANSACTIONS   PIC 9(8).
-           05 FILLER                  PIC X(1) VALUE ','.
-           05 RP-TOTAL-AMOUNT         PIC S9(13)V99.
+           05 RP-TOTAL-TRANSACTIONS   PIC 9(08).
+           05 FILLER                  PIC X(01) VALUE ','.
+           05 RP-TOTAL-AMOUNT         PIC -9(13).99.
 
        WORKING-STORAGE SECTION.
        01  WS-WORK-AREAS.
            05 WS-EOF                  PIC A(1) VALUE 'N'.
            05 WS-COUNTER              PIC 9(8) VALUE 0.
            05 WS-TOTAL-AMOUNT         PIC S9(13)V99 VALUE 0.
+           05 WS-EXIT-CODE            PIC 9(1) VALUE 0.
 
        01  FILE-STATUS-CODES.
            05 FS-TRANSACTION-IN       PIC X(2).
            05 FS-REPORT-OUT           PIC X(2).
 
-       01  COMMAND-LINE-ARGS.
-           05 WS-INPUT-FILENAME       PIC X(100).
-           05 WS-OUTPUT-FILENAME      PIC X(100).
-
        PROCEDURE DIVISION.
        MAIN-PROCEDURE.
-           ACCEPT WS-INPUT-FILENAME FROM COMMAND-LINE
-           ACCEPT WS-OUTPUT-FILENAME FROM COMMAND-LINE
 
            OPEN INPUT TRANSACTION-IN
-           OPEN OUTPUT REPORT-OUT
-
            IF FS-TRANSACTION-IN NOT = "00"
-              DISPLAY "Error opening input file: " FS-TRANSACTION-IN
-              STOP RUN 1
+              DISPLAY "Fatal: Error opening input file. Status: " FS-TRANSACTION-IN UPON SYSERR
+              MOVE 1 TO WS-EXIT-CODE
+              GO TO CLEANUP-AND-EXIT
            END-IF
 
+           OPEN OUTPUT REPORT-OUT
            IF FS-REPORT-OUT NOT = "00"
-              DISPLAY "Error opening output file: " FS-REPORT-OUT
-              STOP RUN 1
+              DISPLAY "Fatal: Error opening output file. Status: " FS-REPORT-OUT UPON SYSERR
+              MOVE 1 TO WS-EXIT-CODE
+              GO TO CLEANUP-AND-EXIT
            END-IF
 
-           PERFORM UNTIL WS-EOF = 'Y'
-               READ TRANSACTION-IN
-                   AT END
-                       SET WS-EOF TO 'Y'
-                   NOT AT END
-                       ADD 1 TO WS-COUNTER
-                       ADD TR-AMOUNT TO WS-TOTAL-AMOUNT
-               END-READ
-           END-PERFORM
+           PERFORM PROCESS-RECORDS UNTIL WS-EOF = 'Y'
 
            MOVE WS-COUNTER TO RP-TOTAL-TRANSACTIONS
            MOVE WS-TOTAL-AMOUNT TO RP-TOTAL-AMOUNT
-
            WRITE REPORT-RECORD
+           IF FS-REPORT-OUT NOT = "00"
+               DISPLAY "Fatal: Error writing to output file. Status: " FS-REPORT-OUT UPON SYSERR
+               MOVE 1 TO WS-EXIT-CODE
+           END-IF.
 
+       CLEANUP-AND-EXIT.
            CLOSE TRANSACTION-IN
            CLOSE REPORT-OUT
+           STOP RUN WS-EXIT-CODE.
 
-           STOP RUN.
+       PROCESS-RECORDS.
+           READ TRANSACTION-IN
+               AT END
+                   SET WS-EOF TO 'Y'
+               NOT AT END
+                   IF FS-TRANSACTION-IN = "00"
+                       ADD 1 TO WS-COUNTER
+                       ADD TR-AMOUNT TO WS-TOTAL-AMOUNT
+                   ELSE
+                       DISPLAY "Warning: Error reading input record. Status: " FS-TRANSACTION-IN UPON SYSERR
+                       SET WS-EOF TO 'Y'
+                       MOVE 1 TO WS-EXIT-CODE
+                   END-IF
+           END-READ.
+
        END PROGRAM TRANSACTION-PROCESSOR.

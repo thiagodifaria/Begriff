@@ -51,5 +51,6 @@ class FinancialAnalysis(Base):
     analysis_results = Column(JSON, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"))
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    blockchain_tx_hash = Column(String, nullable=True, index=True)
 
     owner = relationship("User", back_populates="analyses")

@@ -9,7 +9,7 @@ EMISSION_FACTORS = {
     "default": Decimal("0.15")
 }
 
-def calculate_carbon_footprint(transactions: List[Dict[str, Any]]) -> dict:
+async def calculate_carbon_footprint(transactions: List[Dict[str, Any]]) -> dict:
     total_footprint = Decimal("0")
     footprint_by_category: Dict[str, Decimal] = {}
 

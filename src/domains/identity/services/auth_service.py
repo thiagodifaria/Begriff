@@ -1,11 +1,11 @@
 from datetime import datetime, timedelta
 
-from fastapi import HTTPException
 from jose import jwt
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 
 from src.app.config import settings
+from src.domains.exceptions import UserAlreadyExistsException
 from src.infra.persistence.repositories import user_repository
 from src.infra.shared.schemas import user_schema
 from src.infra.persistence import models
@@ -20,7 +20,7 @@ def get_password_hash(password: str) -> str:
 def create_new_user(db: Session, user: user_schema.UserCreate):
     db_user = user_repository.get_user_by_email(db, email=user.email)
     if db_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
+        raise UserAlreadyExistsException(message="Email already registered")
     hashed_password = get_password_hash(user.password)
     return user_repository.create_user(db=db, user=user, hashed_password=hashed_password)
 

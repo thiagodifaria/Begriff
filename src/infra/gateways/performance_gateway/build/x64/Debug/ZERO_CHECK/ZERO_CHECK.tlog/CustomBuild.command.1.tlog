@@ -1,0 +1,10 @@
+^C:\USERS\THIAG\TESTES\BEGRIFF\SRC\INFRA\GATEWAYS\PERFORMANCE_GATEWAY\BUILD\CMAKEFILES\7EFC9DE7C5A257595B2D40721A41D861\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/thiag/TESTES/Begriff/src/infra/gateways/performance_gateway -BC:/Users/thiag/TESTES/Begriff/src/infra/gateways/performance_gateway/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/thiag/TESTES/Begriff/src/infra/gateways/performance_gateway/build/performance_gateway.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

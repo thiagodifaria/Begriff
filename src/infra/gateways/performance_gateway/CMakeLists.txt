@@ -4,8 +4,10 @@ project(performance_gateway)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package(Crow REQUIRED)
+
 add_executable(performance_gateway src/gateway.cpp)
 
-# Assuming Crow is available to be linked
-# In a real scenario, you might use find_package(Crow) or add_subdirectory(path/to/crow)
-target_link_libraries(performance_gateway PRIVATE crow)
+target_include_directories(performance_gateway PRIVATE include)
+
+target_link_libraries(performance_gateway PRIVATE Crow::Crow asio::asio)
