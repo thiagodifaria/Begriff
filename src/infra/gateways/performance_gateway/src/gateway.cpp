@@ -151,8 +151,10 @@ std::string execute_cobol_process(const std::string& input_data, int& exit_code,
 // Packs a long long into a COMP-3 packed decimal format.
 std::vector<unsigned char> to_comp3(long long value, int num_bytes) {
     std::string s_value = std::to_string(std::abs(value));
-    int num_digits = (num_bytes * 2) - 1;
-    s_value = std::string(num_digits - s_value.length(), '0') + s_value;
+    if (s_value.length() > (num_bytes * 2) - 1) {
+        throw std::runtime_error("Value too large for packed decimal conversion.");
+    }
+    s_value = std::string((num_bytes * 2) - 1 - s_value.length(), '0') + s_value;
 
     std::vector<unsigned char> packed(num_bytes);
     for (int i = 0; i < num_bytes - 1; ++i) {
@@ -160,7 +162,7 @@ std::vector<unsigned char> to_comp3(long long value, int num_bytes) {
     }
 
     unsigned char sign = (value < 0) ? 0x0D : 0x0C;
-    packed[num_bytes - 1] = ((s_value[num_digits - 1] - '0') << 4) | sign;
+    packed[num_bytes - 1] = ((s_value[(num_bytes * 2) - 2] - '0') << 4) | sign;
     
     return packed;
 }
@@ -185,11 +187,11 @@ crow::json::wvalue process_transaction_batch(const crow::json::rvalue& transacti
         auto packed_amount = to_comp3(amount_cents, 8);
         input_data_buffer.append(reinterpret_cast<const char*>(packed_amount.data()), packed_amount.size());
 
-        std::string category = item.has("category") ? item["category"].s() : "";
+        std::string category = item.has("category") ? std::string(item["category"].s()) : "";
         category.resize(20, ' ');
         input_data_buffer.append(category);
 
-        std::string timestamp = item.has("transaction_date") ? item["transaction_date"].s() : "";
+        std::string timestamp = item.has("transaction_date") ? std::string(item["transaction_date"].s()) : "";
         timestamp.resize(26, ' ');
         input_data_buffer.append(timestamp);
     }
@@ -255,7 +257,9 @@ int main() {
         try {
             transactions_json = crow::json::load(req.body);
         } catch (const std::runtime_error& e) {
-            return crow::response(400, crow::json::wvalue{{"error", "Invalid JSON."}});
+            crow::json::wvalue error_response;
+            error_response["error"] = "Invalid JSON.";
+            return crow::response(400, error_response);
         }
 
         auto response_data = process_transaction_batch(transactions_json);

@@ -2,9 +2,9 @@ from sqlalchemy.orm import Session
 
 from src.infra.persistence import models
 from src.infra.shared.schemas import user_schema
+from typing import Optional
 
-
-def get_user_by_email(db: Session, email: str) -> models.User | None:
+def get_user_by_email(db: Session, email: str) -> Optional[models.User]:
     return db.query(models.User).filter(models.User.email == email).first()
 
 

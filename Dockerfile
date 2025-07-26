@@ -9,11 +9,10 @@ ENV PYTHONPATH "${PYTHONPATH}:/app"
 
 # Copy requirements and install dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip &&     pip install --no-cache-dir -r requirements.txt &&     pip install --no-cache-dir python-multipart
 
 # Copy the rest of the application code
-COPY ./src /app/src
+COPY ./src /app
 
 # Expose the port the app runs on
 EXPOSE 8000

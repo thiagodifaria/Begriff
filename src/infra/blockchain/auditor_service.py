@@ -1,17 +1,36 @@
 import json
 import hashlib
 from typing import Dict, Any
+from web3 import Web3
+from src.app.config import settings
+import os
 
-def commit_analysis_to_blockchain(analysis_data: Dict[str, Any]) -> str:
+async def commit_analysis_to_blockchain(analysis_data: Dict[str, Any]) -> str:
     """
-    Simulates committing a record to the blockchain.
+    Commits a record to the blockchain.
 
     Args:
         analysis_data: The analysis data to commit.
 
     Returns:
-        A dummy, but valid-looking, 66-character hexadecimal transaction hash.
+        The transaction hash.
     """
-    canonical_json = json.dumps(analysis_data, sort_keys=True, separators=(',', ':'))
-    sha256_hash = hashlib.sha256(canonical_json.encode('utf-8')).hexdigest()
-    return f"0x{sha256_hash[:64]}"
+    w3 = Web3(Web3.HTTPProvider(settings.BLOCKCHAIN_NODE_URL))
+    if not w3.is_connected():
+        raise ConnectionError("Failed to connect to the blockchain node.")
+
+    # Load contract ABI
+    abi_path = os.path.join(os.path.dirname(__file__), 'contracts', 'AuditTrail.json')
+    with open(abi_path, "r") as f:
+        abi = json.load(f)
+
+    contract = w3.eth.contract(address=settings.AUDIT_CONTRACT_ADDRESS, abi=abi)
+
+    canonical_json = json.dumps(analysis_data, sort_keys=True, separators=(',', ':')).encode('utf-8')
+    record_hash = hashlib.sha256(canonical_json).digest()
+
+    # Use the default unlocked account from Hardhat
+    tx_hash = contract.functions.addRecord(record_hash).transact({'from': w3.eth.accounts[0]})
+    receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+
+    return receipt.transactionHash.hex()

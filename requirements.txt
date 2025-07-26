@@ -6,3 +6,11 @@ pydantic-settings
 python-jose[cryptography]
 passlib[bcrypt]
 httpx
+web3
+py-solc-x
+google-generativeai
+python-multipart
+numpy
+scikit-learn
+tensorflow
+pandas

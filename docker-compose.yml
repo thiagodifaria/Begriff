@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:13-alpine
+    image: postgres:15-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
@@ -14,9 +14,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    command: ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
     volumes:
-      - ./src:/app/src
+      - ./src/domains/risk/models:/app/src/domains/risk/models
+      
     ports:
       - "8000:8000"
     env_file:
@@ -24,15 +25,34 @@ services:
     depends_on:
       - db
       - gateway_server
+      - open_banking_mock_server
+      - blockchain_node
     networks:
       - begriff_network
 
   gateway_server:
     build:
-      context: ./src/infra/gateways/performance_gateway
-      dockerfile: Dockerfile
+      context: . # O contexto agora é a raiz do projeto
+      dockerfile: ./src/infra/gateways/performance_gateway/Dockerfile # Caminho completo para o Dockerfile
     ports:
       - "8081:8081"
+    networks:
+      - begriff_network
+
+  open_banking_mock_server:
+    build:
+      context: ./src/infra/mocks/open_banking_provider
+    ports:
+      - "8080:8080"
+    networks:
+      - begriff_network
+
+  blockchain_node:
+    build:
+      context: ./src/infra/blockchain/node
+    working_dir: /app
+    ports:
+      - "8545:8545"
     networks:
       - begriff_network
 

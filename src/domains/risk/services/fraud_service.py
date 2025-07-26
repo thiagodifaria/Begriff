@@ -2,94 +2,71 @@ import joblib
 import os
 import numpy as np
 import pandas as pd
+import tensorflow as tf
 from typing import Dict, Any, List
 
-# Load the Isolation Forest model
-_model_path = os.path.join(os.path.dirname(__file__), '..', 'models', 'fraud_model_v1.pkl')
-_model = joblib.load(_model_path)
+# Define o caminho para a pasta de modelos de forma absoluta
+_model_path = os.path.join(os.path.dirname(__file__), '..', 'models')
+_model_path = os.path.abspath(os.path.join("/app", "src/domains/risk/models"))
+_if_model = joblib.load(os.path.join(_model_path, 'fraud_model_v1.pkl'))
+_scaler = joblib.load(os.path.join(_model_path, 'scaler.pkl'))
+_autoencoder = tf.keras.models.load_model(os.path.join(_model_path, 'autoencoder_v1.keras'))
 
 async def analyze_for_fraud(transactions: List[Dict[str, Any]]) -> Dict[str, Any]:
     """
-    Analyzes a list of financial transactions for fraudulent activity using an Isolation Forest model.
+    Analyzes a list of financial transactions for fraudulent activity using an ensemble of
+    Isolation Forest and an Autoencoder.
     """
     if not transactions:
         return {
             "fraud_detected": False,
             "highest_risk_score": 0.0,
             "transactions_above_threshold": 0,
-            "riskiest_transactions": []
+            "riskiest_transactions": [],
+            "model_version": "ensemble_v1"
         }
 
-    # 1. Perform Feature Engineering: Convert transactions to DataFrame and create features
+    # 1. Feature Engineering
     df = pd.DataFrame(transactions)
-
-    # Ensure 'amount' is numeric. Handle potential non-numeric values by coercing to numeric.
-    # Errors will turn non-parseable values into NaN, which we can then fill or drop.
     df['amount'] = pd.to_numeric(df['amount'], errors='coerce')
+    df['time_of_day'] = pd.to_datetime(df['timestamp'], errors='coerce').dt.hour
+    df = df.dropna()
 
-    # For 'time_of_day', assuming 'timestamp' exists and is in a format convertible to datetime.
-    # If 'timestamp' is not present or is not a datetime-like string/number, 
-    # you might need to adjust this or use a placeholder.
-    if 'timestamp' in df.columns:
-        df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce')
-        df['time_of_day'] = df['timestamp'].dt.hour + df['timestamp'].dt.minute / 60
-    else:
-        # Placeholder if no timestamp is available. Adjust based on actual data.
-        df['time_of_day'] = np.random.rand(len(df)) * 24 # Random hour for dummy data
-
-    # Select features that the model was trained on. 
-    # Ensure these match the features used in create_mock_model.py (amount, time_of_day).
-    # Drop rows with NaN values that resulted from coercion or missing data.
-    X = df[['amount', 'time_of_day']].dropna()
-
-    # If, after dropping NaNs, X is empty, return early.
-    if X.empty:
+    if df.empty:
         return {
             "fraud_detected": False,
             "highest_risk_score": 0.0,
             "transactions_above_threshold": 0,
-            "riskiest_transactions": []
+            "riskiest_transactions": [],
+            "model_version": "ensemble_v1"
         }
 
-    # 2. Use the Correct Prediction Method: _model.score_samples(X)
-    # Lower values are more anomalous.
-    anomaly_scores = _model.score_samples(X)
+    X = df[['amount', 'time_of_day']]
 
-    # 3. Normalize the Scores: Invert and normalize to a 0-1 risk scale
-    # Higher score = higher risk
-    min_score = anomaly_scores.min()
-    max_score = anomaly_scores.max()
+    # 2. Scale the data
+    X_scaled = _scaler.transform(X)
 
-    if (max_score - min_score) == 0:
-        # Avoid division by zero if all scores are identical
-        risk_scores = np.zeros_like(anomaly_scores)
-    else:
-        # Invert and normalize: most anomalous (lowest score) becomes ~1.0, least anomalous (highest score) becomes ~0.0
-        risk_scores = 1 - (anomaly_scores - min_score) / (max_score - min_score)
+    # 3. Get Isolation Forest scores
+    if_scores = _if_model.score_samples(X_scaled)
+    if_risk_scores = 1 - (if_scores - if_scores.min()) / (if_scores.max() - if_scores.min())
 
-    # Add risk scores back to the DataFrame for easier processing
-    # Align scores back to original transactions, handling dropped NaNs
-    df_with_scores = df.loc[X.index].copy() # Use .loc with X.index to align
-    df_with_scores['risk_score'] = risk_scores
+    # 4. Get Autoencoder scores
+    reconstructed_data = _autoencoder.predict(X_scaled)
+    mse = np.mean(np.power(X_scaled - reconstructed_data, 2), axis=1)
+    ae_risk_scores = (mse - mse.min()) / (mse.max() - mse.min())
 
-    # 4. Process and Return Results
-    highest_risk_score = df_with_scores['risk_score'].max() if not df_with_scores.empty else 0.0
+    # 5. Combine scores
+    final_risk_scores = (if_risk_scores * 0.5) + (ae_risk_scores * 0.5)
 
-    # Define a high-risk threshold
-    high_risk_threshold = 0.85
-    transactions_above_threshold = (df_with_scores['risk_score'] > high_risk_threshold).sum()
-
-    # Identify the riskiest transactions (e.g., top 3 or all above threshold)
-    riskiest_transactions_df = df_with_scores[df_with_scores['risk_score'] > high_risk_threshold].sort_values(by='risk_score', ascending=False)
-    
-    # Convert to list of dicts, including original transaction data and risk_score
-    riskiest_transactions = riskiest_transactions_df.to_dict(orient='records')
-
-    fraud_detected = highest_risk_score > high_risk_threshold # Simple detection based on highest score
+    # 6. Process and Return Results
+    df['risk_score'] = final_risk_scores
+    high_risk_threshold = 0.7
+    riskiest_transactions = df[df['risk_score'] > high_risk_threshold].sort_values(by='risk_score', ascending=False)
 
     return {
-        "fraud_detected": fraud_detected,
-        "highest_risk_score": float(highest_risk_score),
-        "transactions_above_threshold": int(transactions_above_threshold),
-        "riskiest_transactions": riskiest_transactions
+        "fraud_detected": any(df['risk_score'] > high_risk_threshold),
+        "highest_risk_score": df['risk_score'].max(),
+        "transactions_above_threshold": len(riskiest_transactions),
+        "riskiest_transactions": riskiest_transactions.to_dict(orient='records'),
+        "model_version": "ensemble_v1"
     }

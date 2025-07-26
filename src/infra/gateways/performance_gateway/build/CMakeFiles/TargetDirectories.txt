@@ -1,3 +1,0 @@
-C:/Users/thiag/TESTES/Begriff/src/infra/gateways/performance_gateway/build/CMakeFiles/performance_gateway.dir
-C:/Users/thiag/TESTES/Begriff/src/infra/gateways/performance_gateway/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/thiag/TESTES/Begriff/src/infra/gateways/performance_gateway/build/CMakeFiles/ZERO_CHECK.dir

@@ -8,7 +8,7 @@ import datetime
 from src.app.config import settings
 from src.infra.persistence import models
 from src.domains.risk.services import fraud_service
-from src.domains.insights.services import carbon_service
+from src.domains.insights.services import carbon_service, generative_ai_service
 from src.infra.persistence.repositories import analysis_repository
 from src.infra.blockchain import auditor_service
 from src.domains.exceptions import AnalysisGatewayError
@@ -73,9 +73,12 @@ async def run_comprehensive_analysis(db: Session, transactions_data: List[Dict[s
         "legacy_processing": gateway_result,
     }
 
+    generative_insights = await generative_ai_service.generate_personalized_report(user=user, analysis_data=final_report)
+    final_report['generative_summary'] = generative_insights
+
     saved_analysis = analysis_repository.create_analysis(db=db, user=user, analysis_data=final_report)
 
-    tx_hash = auditor_service.commit_analysis_to_blockchain(analysis_data=final_report)
+    tx_hash = await auditor_service.commit_analysis_to_blockchain(analysis_data=final_report)
 
     updated_analysis = analysis_repository.add_blockchain_hash_to_analysis(db=db, analysis_id=saved_analysis.id, tx_hash=tx_hash)
 

@@ -25,7 +25,9 @@ def create_new_user(db: Session, user: user_schema.UserCreate):
     return user_repository.create_user(db=db, user=user, hashed_password=hashed_password)
 
 
-def authenticate_user(db: Session, email: str, password: str) -> models.User | None:
+from typing import Optional
+
+def authenticate_user(db: Session, email: str, password: str) -> Optional[models.User]:
     user = user_repository.get_user_by_email(db, email)
     if not user:
         return None

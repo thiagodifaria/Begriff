@@ -10,7 +10,14 @@ from src.domains.transactions.services import analysis_service
 from src.infra.persistence import models
 from src.infra.shared.schemas import analysis_schema
 
+
+from src.domains.edge_computing.orchestrator import EdgeOrchestrator
+
 router = APIRouter()
+
+# Initialize the EdgeOrchestrator at the module level
+edge_orchestrator = EdgeOrchestrator()
+
 
 
 @router.post("/analysis/", response_model=analysis_schema.FinancialAnalysis)
@@ -21,7 +28,14 @@ async def create_analysis(file: UploadFile = File(...), db: Session = Depends(ge
     contents = await file.read()
     decoded_content = contents.decode('utf-8')
     csv_reader = csv.DictReader(io.StringIO(decoded_content))
-    transactions_data = [row for row in csv_reader]
+    transactions_data = [dict(row) for row in csv_reader]
+
+    # Edge pre-processing step
+    # edge_result = edge_orchestrator.dispatch_preprocessing_task(
+    #     transactions_data=transactions_data,
+    #     user_location="sa-east-1"
+    # )
+    # print(f"Edge pre-processing complete: {edge_result}")  # For now, we'll just print the result
 
     return await analysis_service.run_comprehensive_analysis(db=db, transactions_data=transactions_data, user=current_user)
 

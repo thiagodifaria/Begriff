@@ -9,10 +9,13 @@ class DigitalTwinCreate(DigitalTwinBase):
     financial_profile: dict
 
 
+from typing import Optional
+
+
 class DigitalTwin(DigitalTwinBase):
     id: int
     user_id: int
-    simulation_results: dict | None
+    simulation_results: Optional[dict]
 
     class Config:
         from_attributes = True

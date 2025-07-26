@@ -18,6 +18,9 @@ class User(Base):
     analyses = relationship("FinancialAnalysis", back_populates="owner")
 
 
+from typing import Optional
+
+
 class DigitalTwin(Base):
     __tablename__ = "digital_twins"
 
