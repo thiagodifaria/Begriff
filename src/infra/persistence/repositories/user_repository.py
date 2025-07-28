@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
-from src.infra.persistence import models
-from src.infra.shared.schemas import user_schema
+from infra.persistence import models
+from infra.shared.schemas import user_schema
 from typing import Optional
 
 def get_user_by_email(db: Session, email: str) -> Optional[models.User]:

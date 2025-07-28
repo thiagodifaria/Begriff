@@ -2,9 +2,9 @@ import httpx
 from typing import List, Dict, Any
 from sqlalchemy.orm import Session
 
-from src.app.config import settings
-from src.domains.transactions.services import analysis_service
-from src.infra.persistence.models import User, FinancialAnalysis
+from app.config import settings
+from domains.transactions.services import analysis_service
+from infra.persistence.models import User, FinancialAnalysis
 
 
 async def synchronize_bank_data_and_analyze(

@@ -7,20 +7,71 @@
 #include <iomanip>
 #include <stdexcept>
 #include <algorithm>
+#include <fstream>
 
 #ifdef _WIN32
 #include <windows.h>
 #else
 #include <unistd.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 #endif
 
-// A robust, cross-platform function to execute the COBOL process,
-// piping data to its stdin and reading from its stdout and stderr.
+bool cobol_executable_exists(const std::string& path) {
+#ifdef _WIN32
+    DWORD dwAttrib = GetFileAttributesA(path.c_str());
+    return (dwAttrib != INVALID_FILE_ATTRIBUTES && !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
+#else
+    struct stat buffer;
+    return (stat(path.c_str(), &buffer) == 0 && (buffer.st_mode & S_IXUSR));
+#endif
+}
+
+crow::json::wvalue process_without_cobol(const crow::json::rvalue& transactions_json) {
+    std::cout << "🔄 Processing transactions without COBOL (fallback mode)" << std::endl;
+    
+    if (!transactions_json.has("transactions") || transactions_json["transactions"].t() != crow::json::type::List) {
+        return crow::json::wvalue{{"error", "Invalid JSON format: 'transactions' array not found."}};
+    }
+
+    const auto& transactions = transactions_json["transactions"];
+    
+    int total_transactions = 0;
+    double total_amount = 0.0;
+    
+    for (const auto& item : transactions) {
+        total_transactions++;
+        double amount = item.has("amount") ? item["amount"].d() : 0.0;
+        total_amount += amount;
+        
+        std::string category = item.has("category") ? std::string(item["category"].s()) : std::string("unknown");
+        std::cout << "  Transaction " << total_transactions 
+                  << ": Amount=" << amount 
+                  << ", Category=" << category
+                  << std::endl;
+    }
+    
+    std::cout << "✅ Processed " << total_transactions << " transactions, total: $" << total_amount << std::endl;
+    
+    crow::json::wvalue response;
+    response["processed_transactions"] = total_transactions;
+    response["total_amount"] = total_amount;
+    response["processing_mode"] = "fallback_cpp_only";
+    response["note"] = "COBOL processor not available, using C++ fallback";
+    return response;
+}
+
 std::string execute_cobol_process(const std::string& input_data, int& exit_code, std::string& stderr_data) {
-    std::string command = "./transaction_processor"; // More explicit path
+    std::string command = "./transaction_processor";
     std::string result_data;
     exit_code = -1;
+
+    if (!cobol_executable_exists(command)) {
+        throw std::runtime_error("COBOL executable './transaction_processor' not found or not executable");
+    }
+
+    std::cout << "🚀 Executing COBOL process: " << command << std::endl;
+    std::cout << "📊 Input data size: " << input_data.length() << " bytes" << std::endl;
 
 #ifdef _WIN32
     HANDLE hChildStd_IN_Rd = NULL;
@@ -67,7 +118,6 @@ std::string execute_cobol_process(const std::string& input_data, int& exit_code,
 
     DWORD dwWritten;
     if (!WriteFile(hChildStd_IN_Wr, input_data.c_str(), (DWORD)input_data.length(), &dwWritten, NULL)) {
-        // Writing to a closed pipe may fail, which is okay if the child process exited early.
     }
     CloseHandle(hChildStd_IN_Wr);
 
@@ -103,7 +153,7 @@ std::string execute_cobol_process(const std::string& input_data, int& exit_code,
         throw std::runtime_error("Fork failed");
     }
 
-    if (pid == 0) { // Child process
+    if (pid == 0) {
         close(stdin_pipe[1]);
         dup2(stdin_pipe[0], STDIN_FILENO);
         close(stdin_pipe[0]);
@@ -118,8 +168,8 @@ std::string execute_cobol_process(const std::string& input_data, int& exit_code,
 
         execlp(command.c_str(), command.c_str(), NULL);
         perror("execlp");
-        _exit(127); // If execlp fails
-    } else { // Parent process
+        _exit(127);
+    } else {
         close(stdin_pipe[0]);
         write(stdin_pipe[1], input_data.c_str(), input_data.length());
         close(stdin_pipe[1]);
@@ -145,10 +195,16 @@ std::string execute_cobol_process(const std::string& input_data, int& exit_code,
         }
     }
 #endif
+
+    std::cout << "🎯 COBOL process completed with exit code: " << exit_code << std::endl;
+    std::cout << "📤 Output size: " << result_data.length() << " bytes" << std::endl;
+    if (!stderr_data.empty()) {
+        std::cout << "⚠️  Stderr: " << stderr_data << std::endl;
+    }
+
     return result_data;
 }
 
-// Packs a long long into a COMP-3 packed decimal format.
 std::vector<unsigned char> to_comp3(long long value, int num_bytes) {
     std::string s_value = std::to_string(std::abs(value));
     if (s_value.length() > (num_bytes * 2) - 1) {
@@ -167,33 +223,50 @@ std::vector<unsigned char> to_comp3(long long value, int num_bytes) {
     return packed;
 }
 
-// Processes a batch of transactions by orchestrating a COBOL program
 crow::json::wvalue process_transaction_batch(const crow::json::rvalue& transactions_json) {
+    std::cout << "🏁 Starting transaction batch processing..." << std::endl;
+    
     if (!transactions_json.has("transactions") || transactions_json["transactions"].t() != crow::json::type::List) {
         return crow::json::wvalue{{"error", "Invalid JSON format: 'transactions' array not found."}};
     }
 
     const auto& transactions = transactions_json["transactions"];
+    std::cout << "📊 Processing " << transactions.size() << " transactions" << std::endl;
+    
+    if (!cobol_executable_exists("./transaction_processor")) {
+        std::cout << "⚠️  COBOL executable not found, using fallback processing" << std::endl;
+        return process_without_cobol(transactions_json);
+    }
     
     std::string input_data_buffer;
     input_data_buffer.reserve(transactions.size() * 59);
 
-    for (const auto& item : transactions) {
-        long long id = item.has("id") ? item["id"].i() : 0;
+    for (size_t i = 0; i < transactions.size(); ++i) {
+        const auto& item = transactions[i];
+        
+        std::cout << "📋 Processing transaction " << (i+1) << "/" << transactions.size() << std::endl;
+        
+        long long id = item.has("id") ? item["id"].i() : (long long)(i + 1);
         auto packed_id = to_comp3(id, 5);
         input_data_buffer.append(reinterpret_cast<const char*>(packed_id.data()), packed_id.size());
 
-        long long amount_cents = static_cast<long long>((item.has("amount") ? item["amount"].d() : 0.0) * 100);
+        double amount_value = item.has("amount") ? item["amount"].d() : 0.0;
+        long long amount_cents = static_cast<long long>(amount_value * 100);
         auto packed_amount = to_comp3(amount_cents, 8);
         input_data_buffer.append(reinterpret_cast<const char*>(packed_amount.data()), packed_amount.size());
 
-        std::string category = item.has("category") ? std::string(item["category"].s()) : "";
+        std::string category = item.has("category") ? std::string(item["category"].s()) : std::string("OTHER");
         category.resize(20, ' ');
         input_data_buffer.append(category);
 
-        std::string timestamp = item.has("transaction_date") ? std::string(item["transaction_date"].s()) : "";
+        std::string timestamp = item.has("transaction_date") ? std::string(item["transaction_date"].s()) : 
+                               item.has("date") ? std::string(item["date"].s()) : std::string("1900-01-01");
         timestamp.resize(26, ' ');
         input_data_buffer.append(timestamp);
+        
+        std::cout << "  ID: " << id << ", Amount: $" << amount_value 
+                  << ", Category: " << category.substr(0, 20) 
+                  << ", Date: " << timestamp.substr(0, 10) << std::endl;
     }
 
     int exit_code = 0;
@@ -201,74 +274,92 @@ crow::json::wvalue process_transaction_batch(const crow::json::rvalue& transacti
     try {
         output_data = execute_cobol_process(input_data_buffer, exit_code, stderr_data);
     } catch (const std::runtime_error& e) {
-        return crow::json::wvalue{
-            {"error", "Failed to execute COBOL process."},
-            {"details", e.what()}
-        };
+        std::cout << "❌ COBOL execution failed: " << e.what() << std::endl;
+        std::cout << "🔄 Falling back to C++ processing" << std::endl;
+        return process_without_cobol(transactions_json);
     }
 
     if (exit_code != 0) {
-        return crow::json::wvalue{
-            {"error", "COBOL process execution failed."},
-            {"return_code", exit_code},
-            {"stderr", stderr_data},
-            {"stdout", output_data}
-        };
+        std::cout << "❌ COBOL process failed with exit code: " << exit_code << std::endl;
+        std::cout << "🔄 Falling back to C++ processing" << std::endl;
+        return process_without_cobol(transactions_json);
     }
 
     try {
-        // The COBOL output is a fixed-width record.
-        // RP-TOTAL-TRANSACTIONS: PIC 9(8) -> 8 bytes
-        // FILLER: PIC X(1) -> 1 byte
-        // RP-TOTAL-AMOUNT: PIC S9(13)V99 -> 15 bytes (1 sign + 15 digits)
-        if (output_data.length() < 24) { // 8 + 1 + 15
-             throw std::runtime_error("Output from COBOL process is too short. Expected 24 bytes.");
+        if (output_data.length() < 24) {
+             throw std::runtime_error("Output from COBOL process is too short. Expected 24 bytes, got " + std::to_string(output_data.length()));
         }
 
         std::string total_transactions_str = output_data.substr(0, 8);
         std::string total_amount_str = output_data.substr(9, 15);
         
-        // Trim whitespace
         total_transactions_str.erase(total_transactions_str.find_last_not_of(" \n\r\t")+1);
         total_amount_str.erase(total_amount_str.find_last_not_of(" \n\r\t")+1);
 
         long long total_transactions = std::stoll(total_transactions_str);
         double total_amount = std::stod(total_amount_str) / 100.0;
         
+        std::cout << "✅ COBOL processing successful!" << std::endl;
+        std::cout << "📊 Results: " << total_transactions << " transactions, $" << total_amount << std::endl;
+        
         crow::json::wvalue response;
         response["processed_transactions"] = total_transactions;
         response["total_amount"] = total_amount;
+        response["processing_mode"] = "cobol_legacy";
         return response;
     } catch (const std::exception& e) {
-        return crow::json::wvalue{
-            {"error", "Failed to parse COBOL output."},
-            {"details", e.what()},
-            {"raw_output", output_data}
-        };
+        std::cout << "❌ Failed to parse COBOL output: " << e.what() << std::endl;
+        std::cout << "🔄 Falling back to C++ processing" << std::endl;
+        return process_without_cobol(transactions_json);
     }
 }
 
 int main() {
     crow::SimpleApp app;
+    
+    std::cout << "🚀 Gateway Server starting on port 8081..." << std::endl;
+    std::cout << "🔍 Checking for COBOL executable..." << std::endl;
+    
+    if (cobol_executable_exists("./transaction_processor")) {
+        std::cout << "✅ COBOL executable found and ready" << std::endl;
+    } else {
+        std::cout << "⚠️  COBOL executable not found - fallback mode will be used" << std::endl;
+    }
 
     CROW_ROUTE(app, "/process").methods("POST"_method)
     ([](const crow::request& req){
+        std::cout << "\n🎯 New processing request received" << std::endl;
+        std::cout << "📦 Request body size: " << req.body.length() << " bytes" << std::endl;
+        
         crow::json::rvalue transactions_json;
         try {
             transactions_json = crow::json::load(req.body);
         } catch (const std::runtime_error& e) {
+            std::cout << "❌ JSON parsing failed: " << e.what() << std::endl;
             crow::json::wvalue error_response;
             error_response["error"] = "Invalid JSON.";
+            error_response["details"] = e.what();
             return crow::response(400, error_response);
         }
 
         auto response_data = process_transaction_batch(transactions_json);
         
         if (response_data.count("error")) {
+            std::cout << "❌ Processing failed with error" << std::endl;
             return crow::response(500, response_data);
         }
 
+        std::cout << "✅ Processing completed successfully" << std::endl;
         return crow::response(200, response_data);
+    });
+
+    CROW_ROUTE(app, "/health").methods("GET"_method)
+    ([](){
+        crow::json::wvalue health;
+        health["status"] = "healthy";
+        health["cobol_available"] = cobol_executable_exists("./transaction_processor");
+        health["timestamp"] = std::time(nullptr);
+        return crow::response(200, health);
     });
 
     app.port(8081).multithreaded().run();

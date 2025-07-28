@@ -4,11 +4,11 @@ from jose import jwt
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 
-from src.app.config import settings
-from src.domains.exceptions import UserAlreadyExistsException
-from src.infra.persistence.repositories import user_repository
-from src.infra.shared.schemas import user_schema
-from src.infra.persistence import models
+from app.config import settings
+from domains.exceptions import UserAlreadyExistsException
+from infra.persistence.repositories import user_repository
+from infra.shared.schemas import user_schema
+from infra.persistence import models
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

@@ -2,10 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
-from src.infra.persistence.database import get_db
-from src.domains.identity.services import auth_service
-from src.infra.shared.schemas import user_schema
-from src.domains.identity.dependencies import get_current_user
+from infra.persistence.database import get_db
+from domains.identity.services import auth_service
+from infra.shared.schemas import user_schema
+from domains.identity.dependencies import get_current_user
 
 router = APIRouter()
 

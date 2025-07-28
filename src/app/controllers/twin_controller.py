@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List
 
-from src.infra.persistence.database import get_db
-from src.domains.insights.services import digital_twin_service
-from src.domains.identity.dependencies import get_current_user
-from src.infra.persistence import models
-from src.infra.shared.schemas import digital_twin_schema
+from infra.persistence.database import get_db
+from domains.insights.services import digital_twin_service
+from domains.identity.dependencies import get_current_user
+from infra.persistence import models
+from infra.shared.schemas import digital_twin_schema
 
 router = APIRouter()
 

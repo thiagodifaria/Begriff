@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from src.infra.persistence import models
+from infra.persistence import models
 from typing import List
 
 

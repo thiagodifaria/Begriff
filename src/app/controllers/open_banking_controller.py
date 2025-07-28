@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from src.domains.identity.dependencies import get_current_user
-from src.infra.persistence.database import get_db
-from src.domains.open_banking.services import sync_service
-from src.infra.persistence import models
-from src.infra.shared.schemas import analysis_schema
+from domains.identity.dependencies import get_current_user
+from infra.persistence.database import get_db
+from domains.open_banking.services import sync_service
+from infra.persistence import models
+from infra.shared.schemas import analysis_schema
 
 router = APIRouter()
 

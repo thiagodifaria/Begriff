@@ -14,9 +14,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
     volumes:
-      - ./src/domains/risk/models:/app/src/domains/risk/models
+      - ./src/domains/risk/models:/app/domains/risk/models
       
     ports:
       - "8000:8000"

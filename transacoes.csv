@@ -1,0 +1,11 @@
+id,amount,category,transaction_date,description
+1,45.50,food,2024-01-15,Grocery shopping at supermarket
+2,120.00,transport,2024-01-16,Gas station fuel
+3,25.75,entertainment,2024-01-17,Movie tickets
+4,89.30,food,2024-01-18,Restaurant dinner
+5,200.00,shopping,2024-01-19,Clothing store purchase
+6,15.20,food,2024-01-20,Coffee shop
+7,75.00,transport,2024-01-21,Uber rides
+8,350.00,shopping,2024-01-22,Electronics purchase
+9,12.50,entertainment,2024-01-23,Streaming subscription
+10,180.00,food,2024-01-24,Weekly groceries

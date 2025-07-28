@@ -4,19 +4,19 @@ import csv
 import io
 from typing import List
 
-from src.infra.persistence.database import get_db
-from src.domains.identity.dependencies import get_current_user
-from src.domains.transactions.services import analysis_service
-from src.infra.persistence import models
-from src.infra.shared.schemas import analysis_schema
+from infra.persistence.database import get_db
+from domains.identity.dependencies import get_current_user
+from domains.transactions.services import analysis_service
+from infra.persistence import models
+from infra.shared.schemas import analysis_schema
 
 
-from src.domains.edge_computing.orchestrator import EdgeOrchestrator
+from domains.edge_computing.orchestrator import EdgeOrchestrator
 
 router = APIRouter()
 
 # Initialize the EdgeOrchestrator at the module level
-edge_orchestrator = EdgeOrchestrator()
+# edge_orchestrator = EdgeOrchestrator()
 
 
 

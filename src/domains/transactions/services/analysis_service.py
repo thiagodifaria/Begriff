@@ -5,13 +5,13 @@ from typing import List, Dict, Any
 from decimal import Decimal
 import datetime
 
-from src.app.config import settings
-from src.infra.persistence import models
-from src.domains.risk.services import fraud_service
-from src.domains.insights.services import carbon_service, generative_ai_service
-from src.infra.persistence.repositories import analysis_repository
-from src.infra.blockchain import auditor_service
-from src.domains.exceptions import AnalysisGatewayError
+from app.config import settings
+from infra.persistence import models
+from domains.risk.services import fraud_service
+from domains.insights.services import carbon_service, generative_ai_service
+from infra.persistence.repositories import analysis_repository
+from infra.blockchain import auditor_service
+from domains.exceptions import AnalysisGatewayError
 
 def create_transactions_in_db(db: Session, transactions_data: List[Dict[str, Any]], user: models.User):
     for transaction_data in transactions_data:

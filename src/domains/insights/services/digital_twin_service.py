@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 
-from src.infra.persistence import models
-from src.infra.shared.schemas import digital_twin_schema
-from src.domains.insights.simulators.digital_twin_simulator import run_monte_carlo_simulation
+from infra.persistence import models
+from infra.shared.schemas import digital_twin_schema
+from domains.insights.simulators.digital_twin_simulator import run_monte_carlo_simulation
 
 def create_digital_twin_for_user(db: Session, twin_data: digital_twin_schema.DigitalTwinCreate, user: models.User) -> models.DigitalTwin:
     simulation_results = run_monte_carlo_simulation(twin_data.financial_profile)

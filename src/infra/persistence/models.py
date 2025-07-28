@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, JSON, DateT
 from sqlalchemy.orm import relationship
 import datetime
 
-from src.infra.persistence.database import Base
+from infra.persistence.database import Base
 
 
 class User(Base):

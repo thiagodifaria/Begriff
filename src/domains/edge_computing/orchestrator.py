@@ -1,6 +1,6 @@
 import ray
 from typing import List, Dict, Any
-from src.domains.edge_computing.nodes import EdgeComputeNode
+from domains.edge_computing.nodes import EdgeComputeNode
 
 class EdgeOrchestrator:
     """

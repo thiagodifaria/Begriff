@@ -3,10 +3,10 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 
-from src.app.config import settings
-from src.infra.persistence.database import get_db
-from src.infra.persistence.repositories import user_repository
-from src.infra.shared.schemas import user_schema
+from app.config import settings
+from infra.persistence.database import get_db
+from infra.persistence.repositories import user_repository
+from infra.shared.schemas import user_schema
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/token")
 
