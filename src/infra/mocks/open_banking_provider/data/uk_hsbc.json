@@ -1,0 +1,25 @@
+{
+  "id_banco": "hsbc",
+  "nome_banco": "HSBC",
+  "pais": "GBR",
+  "contas": [
+    {
+      "id_conta": "e5f6a7b8-c9d0-1234-5678-90abcdef345",
+      "apelido_conta": "Current Account",
+      "tipo_conta": "CONTA_CORRENTE",
+      "moeda": "GBP",
+      "saldo": 8765.43,
+      "transacoes": [
+        {
+          "id_transacao": "tf678901-2345-6789-0123-678901fghij",
+          "valor": -30.00,
+          "moeda": "GBP",
+          "descricao": "Tesco",
+          "categoria": "Alimentação",
+          "data_transacao": "2025-08-03T13:00:00Z",
+          "status": "CONFIRMADA"
+        }
+      ]
+    }
+  ]
+}

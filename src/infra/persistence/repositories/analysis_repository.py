@@ -1,12 +1,13 @@
 from sqlalchemy.orm import Session
-from infra.persistence import models
-from typing import List
+from typing import List, Dict, Any
+from src.infra.persistence.models import FinancialAnalysis, User, Transaction
 
 
-def create_analysis(db: Session, user: models.User, analysis_data: dict) -> models.FinancialAnalysis:
-    db_analysis = models.FinancialAnalysis(
+def create_analysis(db: Session, user: User, analysis_data: Dict[str, Any], analysis_type: str) -> FinancialAnalysis:
+    db_analysis = FinancialAnalysis(
         analysis_results=analysis_data,
-        owner=user
+        owner=user,
+        analysis_type=analysis_type
     )
     db.add(db_analysis)
     db.commit()
@@ -14,13 +15,32 @@ def create_analysis(db: Session, user: models.User, analysis_data: dict) -> mode
     return db_analysis
 
 
-def get_analyses_by_user_id(db: Session, user_id: int, skip: int = 0, limit: int = 100) -> List[models.FinancialAnalysis]:
-    return db.query(models.FinancialAnalysis).filter(models.FinancialAnalysis.user_id == user_id).order_by(models.FinancialAnalysis.created_at.desc()).offset(skip).limit(limit).all()
+def get_analyses_by_user_id(db: Session, user_id: int) -> List[FinancialAnalysis]:
+    return db.query(FinancialAnalysis).filter(FinancialAnalysis.user_id == user_id).all()
 
-def add_blockchain_hash_to_analysis(db: Session, analysis_id: int, tx_hash: str) -> models.FinancialAnalysis:
-    db_analysis = db.query(models.FinancialAnalysis).filter(models.FinancialAnalysis.id == analysis_id).first()
+def get_analyses_by_user_and_type(db: Session, user_id: int, analysis_type: str) -> List[FinancialAnalysis]:
+    return db.query(FinancialAnalysis).filter(
+        FinancialAnalysis.user_id == user_id,
+        FinancialAnalysis.analysis_type == analysis_type
+    ).all()
+
+
+def add_blockchain_hash_to_analysis(db: Session, analysis_id: int, tx_hash: str) -> FinancialAnalysis:
+    db_analysis = db.query(FinancialAnalysis).filter(FinancialAnalysis.id == analysis_id).first()
     if db_analysis:
         db_analysis.blockchain_tx_hash = tx_hash
         db.commit()
         db.refresh(db_analysis)
     return db_analysis
+
+def get_transactions_by_user(db: Session, user_id: int) -> List[Transaction]:
+    """
+    Busca todas as transações de um usuário no banco de dados.
+    """
+    return db.query(Transaction).filter(Transaction.user_id == user_id).all()
+
+def get_transactions_by_source_prefix(db: Session, user_id: int, source_prefix: str) -> List[Transaction]:
+    return db.query(Transaction).filter(
+        Transaction.user_id == user_id,
+        Transaction.source.like(f"{source_prefix}%")
+    ).all()

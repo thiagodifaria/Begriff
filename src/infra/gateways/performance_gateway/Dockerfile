@@ -93,6 +93,7 @@ COPY --from=cobol-builder /app/transaction_processor .
 
 # Copy GnuCOBOL runtime libraries from the builder stage
 COPY --from=cobol-builder /usr/local/lib/libcob.so* /usr/local/lib/
+COPY --from=cobol-builder /lib/x86_64-linux-gnu/libncursesw.so.6 /usr/local/lib/
 COPY --from=cobol-builder /usr/local/share/gnucobol /usr/local/share/gnucobol
 
 # Configure library path for runtime

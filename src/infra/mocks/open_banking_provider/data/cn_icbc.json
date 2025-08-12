@@ -1,0 +1,25 @@
+{
+  "id_banco": "icbc",
+  "nome_banco": "ICBC (China)",
+  "pais": "CHN",
+  "contas": [
+    {
+      "id_conta": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+      "apelido_conta": "Checking Account",
+      "tipo_conta": "CONTA_CORRENTE",
+      "moeda": "CNY",
+      "saldo": 1234567.89,
+      "transacoes": [
+        {
+          "id_transacao": "tk123456-7890-1234-5678-123456klmno",
+          "valor": -200.00,
+          "moeda": "CNY",
+          "descricao": "Alipay Purchase",
+          "categoria": "Compras",
+          "data_transacao": "2025-08-04T18:00:00Z",
+          "status": "CONFIRMADA"
+        }
+      ]
+    }
+  ]
+}

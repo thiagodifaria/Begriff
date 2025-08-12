@@ -6,7 +6,7 @@ import tensorflow as tf
 from typing import Dict, Any, List
 
 _model_path = os.path.join(os.path.dirname(__file__), '..', 'models')
-_model_path = os.path.abspath(os.path.join("/app", "domains/risk/models"))
+_model_path = os.path.abspath(os.path.join("src", "domains/risk/models"))
 _if_model = joblib.load(os.path.join(_model_path, 'fraud_model_v1.pkl'))
 _scaler = joblib.load(os.path.join(_model_path, 'scaler.pkl'))
 _autoencoder = tf.keras.models.load_model(os.path.join(_model_path, 'autoencoder_v1.keras'))

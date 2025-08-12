@@ -1,5 +1,5 @@
 # Stage 1: Base Image
-FROM python:3.9-slim
+FROM python:3.10-slim
 
 # Set working directory
 WORKDIR /app
@@ -12,7 +12,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip &&     pip install --no-cache-dir -r requirements.txt &&     pip install --no-cache-dir python-multipart
 
 # Copy the rest of the application code
-COPY ./src /app
+COPY ./src /app/src
 
 # Expose the port the app runs on
 EXPOSE 8000

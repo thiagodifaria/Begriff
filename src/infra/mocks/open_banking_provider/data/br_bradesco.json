@@ -1,0 +1,52 @@
+{
+  "id_banco": "bradesco",
+  "nome_banco": "Bradesco",
+  "pais": "BRA",
+  "contas": [
+    {
+      "id_conta": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+      "apelido_conta": "Conta Corrente",
+      "tipo_conta": "CONTA_CORRENTE",
+      "moeda": "BRL",
+      "saldo": 8500.50,
+      "transacoes": [
+        {
+          "id_transacao": "t4d5e6f7-8901-2345-6789-0abcdef123",
+          "valor": -80.00,
+          "moeda": "BRL",
+          "descricao": "Assinatura Netflix",
+          "categoria": "Entretenimento",
+          "data_transacao": "2025-08-02T11:00:00Z",
+          "status": "CONFIRMADA"
+        },
+        {
+          "id_transacao": "t5e6f789-0123-4567-8901-bcdef12345a",
+          "valor": -350.00,
+          "moeda": "BRL",
+          "descricao": "Compra supermercado",
+          "categoria": "Alimentação",
+          "data_transacao": "2025-08-04T18:30:00Z",
+          "status": "CONFIRMADA"
+        }
+      ]
+    },
+    {
+      "id_conta": "d4e5f6a7-b8c9-0123-4567-890abcdef234",
+      "apelido_conta": "Poupança Fácil",
+      "tipo_conta": "CONTA_POUPANCA",
+      "moeda": "BRL",
+      "saldo": 22000.00,
+      "transacoes": [
+        {
+          "id_transacao": "t6f78901-2345-6789-0123-cdef12345ab",
+          "valor": 500.00,
+          "moeda": "BRL",
+          "descricao": "Transferência de conta corrente",
+          "categoria": "Poupança",
+          "data_transacao": "2025-07-25T10:00:00Z",
+          "status": "CONFIRMADA"
+        }
+      ]
+    }
+  ]
+}

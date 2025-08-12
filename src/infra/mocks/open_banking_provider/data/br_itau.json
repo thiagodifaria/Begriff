@@ -1,0 +1,53 @@
+
+{
+  "id_banco": "itau",
+  "nome_banco": "Itaú Unibanco",
+  "pais": "BRA",
+  "contas": [
+    {
+      "id_conta": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      "apelido_conta": "Conta Corrente Principal",
+      "tipo_conta": "CONTA_CORRENTE",
+      "moeda": "BRL",
+      "saldo": 15000.00,
+      "transacoes": [
+        {
+          "id_transacao": "t1a2b3c4-d5e6-f789-0123-456789abcdef",
+          "valor": -150.00,
+          "moeda": "BRL",
+          "descricao": "Pagamento fatura de energia",
+          "categoria": "Contas",
+          "data_transacao": "2025-08-01T10:00:00Z",
+          "status": "CONFIRMADA"
+        },
+        {
+          "id_transacao": "t2b3c4d5-e6f7-8901-2345-67890abcdef1",
+          "valor": 2500.00,
+          "moeda": "BRL",
+          "descricao": "Salário",
+          "categoria": "Renda",
+          "data_transacao": "2025-08-05T09:00:00Z",
+          "status": "CONFIRMADA"
+        }
+      ]
+    },
+    {
+      "id_conta": "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
+      "apelido_conta": "Conta Poupança",
+      "tipo_conta": "CONTA_POUPANCA",
+      "moeda": "BRL",
+      "saldo": 50000.00,
+      "transacoes": [
+        {
+          "id_transacao": "t3c4d5e6-f789-0123-4567-89abcdef12",
+          "valor": 1000.00,
+          "moeda": "BRL",
+          "descricao": "Depósito",
+          "categoria": "Poupança",
+          "data_transacao": "2025-07-20T15:00:00Z",
+          "status": "CONFIRMADA"
+        }
+      ]
+    }
+  ]
+}

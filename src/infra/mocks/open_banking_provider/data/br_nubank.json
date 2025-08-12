@@ -1,0 +1,43 @@
+{
+  "id_banco": "nubank",
+  "nome_banco": "Nubank",
+  "pais": "BRA",
+  "contas": [
+    {
+      "id_conta": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      "apelido_conta": "Cartão de Crédito",
+      "tipo_conta": "CARTAO_CREDITO",
+      "moeda": "BRL",
+      "saldo": -2500.00,
+      "transacoes": [
+        {
+          "id_transacao": "t1a2b3c4-d5e6-f789-0123-456789abcdef",
+          "valor": -45.99,
+          "moeda": "BRL",
+          "descricao": "Pagamento Spotify AB",
+          "categoria": "Entretenimento",
+          "data_transacao": "2025-08-01T10:00:00Z",
+          "status": "CONFIRMADA"
+        },
+        {
+          "id_transacao": "t2b3c4d5-e6f7-8901-2345-67890abcdef1",
+          "valor": -89.90,
+          "moeda": "BRL",
+          "descricao": "Compra iFood",
+          "categoria": "Alimentação",
+          "data_transacao": "2025-08-02T19:30:00Z",
+          "status": "CONFIRMADA"
+        },
+        {
+          "id_transacao": "t3c4d5e6-f789-0123-4567-89abcdef12",
+          "valor": -29.90,
+          "moeda": "BRL",
+          "descricao": "Assinatura Amazon Prime",
+          "categoria": "Compras",
+          "data_transacao": "2025-08-03T12:00:00Z",
+          "status": "CONFIRMADA"
+        }
+      ]
+    }
+  ]
+}

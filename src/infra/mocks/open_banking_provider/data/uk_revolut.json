@@ -1,0 +1,34 @@
+{
+  "id_banco": "revolut",
+  "nome_banco": "Revolut",
+  "pais": "GBR",
+  "contas": [
+    {
+      "id_conta": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      "apelido_conta": "Revolut Account",
+      "tipo_conta": "CONTA_CORRENTE",
+      "moeda": "GBP",
+      "saldo": 2500.00,
+      "transacoes": [
+        {
+          "id_transacao": "th890123-4567-8901-2345-890123hijkl",
+          "valor": -20.00,
+          "moeda": "EUR",
+          "descricao": "Amazon DE",
+          "categoria": "Compras",
+          "data_transacao": "2025-08-02T14:00:00Z",
+          "status": "CONFIRMADA"
+        },
+        {
+          "id_transacao": "ti901234-5678-9012-3456-901234ijklm",
+          "valor": -15.00,
+          "moeda": "USD",
+          "descricao": "Netflix US",
+          "categoria": "Entretenimento",
+          "data_transacao": "2025-08-01T11:00:00Z",
+          "status": "CONFIRMADA"
+        }
+      ]
+    }
+  ]
+}

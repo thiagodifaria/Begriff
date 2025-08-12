@@ -1,0 +1,25 @@
+{
+  "id_banco": "caixa",
+  "nome_banco": "Caixa Econômica Federal",
+  "pais": "BRA",
+  "contas": [
+    {
+      "id_conta": "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
+      "apelido_conta": "Conta Poupança",
+      "tipo_conta": "CONTA_POUPANCA",
+      "moeda": "BRL",
+      "saldo": 123456.78,
+      "transacoes": [
+        {
+          "id_transacao": "tc345678-9012-3456-7890-345678cdefg",
+          "valor": 1000.00,
+          "moeda": "BRL",
+          "descricao": "Depósito FGTS",
+          "categoria": "Renda",
+          "data_transacao": "2025-08-05T08:00:00Z",
+          "status": "CONFIRMADA"
+        }
+      ]
+    }
+  ]
+}

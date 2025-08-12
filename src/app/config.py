@@ -11,8 +11,8 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     
     GATEWAY_API_URL: str = "http://localhost:8080"
-    OPEN_BANKING_MOCK_URL: str = "http://localhost:8081"
-    BLOCKCHAIN_NODE_URL: str = "http://localhost:8545"
+    OPEN_BANKING_MOCK_URL: str = "http://open_banking_mock_server:8080"
+    BLOCKCHAIN_NODE_URL: str = "http://blockchain_node:8545"
     AUDIT_CONTRACT_ADDRESS: str = "0x0000000000000000000000000000000000000000"
     GEMINI_API_KEY: str = ""
     
@@ -50,8 +50,10 @@ class Settings(BaseSettings):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        is_docker = self._is_docker_environment()
+
         if not self.DATABASE_URL:
-            if self._is_docker_environment():
+            if is_docker:
                 self.DATABASE_URL = f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:5432/{self.POSTGRES_DB}"
                 print(f"🐳 Docker detected - Using PostgreSQL: {self.DATABASE_URL}")
             else:
@@ -59,6 +61,13 @@ class Settings(BaseSettings):
                 print(f"💻 Local environment - Using SQLite: {self.DATABASE_URL}")
         else:
             print(f"📋 DATABASE_URL from environment: {self.DATABASE_URL}")
+
+        if is_docker:
+            self.OPEN_BANKING_MOCK_URL = "http://open_banking_mock_server:8080"
+            self.BLOCKCHAIN_NODE_URL = "http://blockchain_node:8545"
+        else:
+            self.OPEN_BANKING_MOCK_URL = "http://localhost:8080"
+            self.BLOCKCHAIN_NODE_URL = "http://localhost:8545"
 
     def _is_docker_environment(self) -> bool:
         """Detecta se está rodando em container Docker"""

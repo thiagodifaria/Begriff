@@ -1,0 +1,25 @@
+{
+  "id_banco": "dbs",
+  "nome_banco": "DBS Bank (Singapura)",
+  "pais": "SGP",
+  "contas": [
+    {
+      "id_conta": "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
+      "apelido_conta": "Savings Account",
+      "tipo_conta": "CONTA_POUPANCA",
+      "moeda": "SGD",
+      "saldo": 98765.43,
+      "transacoes": [
+        {
+          "id_transacao": "tj012345-6789-0123-4567-012345jklmn",
+          "valor": 1000.00,
+          "moeda": "SGD",
+          "descricao": "Salary Credit",
+          "categoria": "Renda",
+          "data_transacao": "2025-08-05T09:30:00Z",
+          "status": "CONFIRMADA"
+        }
+      ]
+    }
+  ]
+}

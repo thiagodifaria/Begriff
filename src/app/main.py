@@ -1,12 +1,12 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from app.config import settings
-from app.controllers import auth_controller, twin_controller, analysis_controller, open_banking_controller
-from domains.exceptions import UserNotFoundException, UserAlreadyExistsException, AnalysisGatewayError
+from src.app.config import settings
+from src.app.controllers import auth_controller, twin_controller, analysis_controller, open_banking_controller
+from src.domains.exceptions import UserNotFoundException, UserAlreadyExistsException, AnalysisGatewayError
 
-from infra.persistence.database import engine, Base
-from infra.persistence import models
+from src.infra.persistence.database import engine, Base
+from src.infra.persistence import models
 
 app = FastAPI(title=settings.PROJECT_NAME)
 
@@ -49,6 +49,6 @@ app.include_router(twin_controller.router, prefix="/api/v1", tags=["Digital Twin
 app.include_router(analysis_controller.router, prefix="/api/v1", tags=["Analysis"])
 app.include_router(open_banking_controller.router, prefix="/api/v1", tags=["Open Banking"])
 
-@app.get("/")
+@app.get("/", tags=["Status"])
 def read_root():
     return {"message": "Service is running"}

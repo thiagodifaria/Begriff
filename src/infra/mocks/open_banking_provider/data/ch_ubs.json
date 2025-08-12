@@ -1,0 +1,25 @@
+{
+  "id_banco": "ubs",
+  "nome_banco": "UBS (Suíça)",
+  "pais": "CHE",
+  "contas": [
+    {
+      "id_conta": "f6a7b8c9-d0e1-2345-6789-0abcdef4567",
+      "apelido_conta": "Savings Account",
+      "tipo_conta": "CONTA_POUPANCA",
+      "moeda": "CHF",
+      "saldo": 150000.00,
+      "transacoes": [
+        {
+          "id_transacao": "tg789012-3456-7890-1234-789012ghijk",
+          "valor": 5000.00,
+          "moeda": "CHF",
+          "descricao": "Wire Transfer Deposit",
+          "categoria": "Renda",
+          "data_transacao": "2025-07-30T10:00:00Z",
+          "status": "CONFIRMADA"
+        }
+      ]
+    }
+  ]
+}

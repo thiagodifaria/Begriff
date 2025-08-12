@@ -1,0 +1,25 @@
+{
+  "id_banco": "chase",
+  "nome_banco": "Chase",
+  "pais": "USA",
+  "contas": [
+    {
+      "id_conta": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+      "apelido_conta": "Checking Account",
+      "tipo_conta": "CONTA_CORRENTE",
+      "moeda": "USD",
+      "saldo": 5432.10,
+      "transacoes": [
+        {
+          "id_transacao": "td456789-0123-4567-8901-456789defgh",
+          "valor": -50.00,
+          "moeda": "USD",
+          "descricao": "Starbucks",
+          "categoria": "Alimentação",
+          "data_transacao": "2025-08-04T15:30:00Z",
+          "status": "CONFIRMADA"
+        }
+      ]
+    }
+  ]
+}

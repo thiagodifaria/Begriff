@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from app.config import settings
+from src.app.config import settings
 
 def get_connect_args():
     """Retorna connect_args apropriados baseado no tipo de banco"""

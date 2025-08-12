@@ -21,6 +21,7 @@ def get_or_create_user_data(user_id: int) -> dict:
 def _generate_transactions_for_account() -> list[Transaction]:
     transactions = []
     today = date.today()
+    categories = ["Groceries", "Salary", "Restaurant", "Online Shopping", "Utilities", "Transport", "Health", "Entertainment"]
     for _ in range(random.randint(5, 20)):
         transaction_date = today - timedelta(days=random.randint(0, 90))
         transactions.append(
@@ -28,6 +29,7 @@ def _generate_transactions_for_account() -> list[Transaction]:
                 amount=random.uniform(-1000, 1000),
                 description=random.choice(["Groceries", "Salary", "Restaurant", "Online Shopping", "Utilities"]),
                 transaction_date=transaction_date,
+                category=random.choice(categories),
             )
         )
     return transactions

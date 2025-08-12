@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, JSON, DateT
 from sqlalchemy.orm import relationship
 import datetime
 
-from infra.persistence.database import Base
+from src.infra.persistence.database import Base
 
 
 class User(Base):
@@ -43,6 +43,7 @@ class Transaction(Base):
     category = Column(String, index=True)
     transaction_date = Column(Date)
     user_id = Column(Integer, ForeignKey("users.id"))
+    source = Column(String, nullable=False, index=True)
 
     owner = relationship("User", back_populates="transactions")
 
@@ -55,5 +56,6 @@ class FinancialAnalysis(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     blockchain_tx_hash = Column(String, nullable=True, index=True)
+    analysis_type = Column(String, nullable=False, index=True)
 
     owner = relationship("User", back_populates="analyses")

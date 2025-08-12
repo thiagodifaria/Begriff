@@ -14,7 +14,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    command: ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
     volumes:
       - ./src/domains/risk/models:/app/domains/risk/models
       
@@ -27,15 +27,42 @@ services:
       - gateway_server
       - open_banking_mock_server
       - blockchain_node
+      - reconciliation_middleware
+      - crypto_middleware
     networks:
       - begriff_network
 
   gateway_server:
     build:
-      context: . # O contexto agora é a raiz do projeto
-      dockerfile: ./src/infra/gateways/performance_gateway/Dockerfile # Caminho completo para o Dockerfile
+      context: .
+      dockerfile: ./src/infra/gateways/performance_gateway/Dockerfile
     ports:
       - "8081:8081"
+    networks:
+      - begriff_network
+
+  reconciliation_middleware:
+    build:
+      # CORREÇÃO: O contexto foi alterado para a raiz do projeto ('.')
+      # Isso permite que o Dockerfile acesse qualquer arquivo do projeto.
+      context: .
+      # CORREÇÃO: O caminho para o Dockerfile agora é o caminho completo a partir da nova raiz de contexto.
+      dockerfile: src/domains/middleware/Dockerfile
+      target: reconciliation_runtime
+    ports:
+      - "18080:18080"
+    networks:
+      - begriff_network
+
+  crypto_middleware:
+    build:
+      # CORREÇÃO: O contexto foi alterado para a raiz do projeto ('.')
+      context: .
+      # CORREÇÃO: O caminho para o Dockerfile agora é o caminho completo a partir da nova raiz de contexto.
+      dockerfile: src/domains/middleware/Dockerfile
+      target: crypto_runtime
+    ports:
+      - "18081:18081"
     networks:
       - begriff_network
 

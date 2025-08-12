@@ -1,0 +1,34 @@
+{
+  "id_banco": "xp",
+  "nome_banco": "XP Inc.",
+  "pais": "BRA",
+  "contas": [
+    {
+      "id_conta": "e5f6a7b8-c9d0-1234-5678-90abcdef345",
+      "apelido_conta": "Conta de Investimentos",
+      "tipo_conta": "CONTA_INVESTIMENTO",
+      "moeda": "BRL",
+      "saldo": 150000.00,
+      "transacoes": [
+        {
+          "id_transacao": "t7890123-4567-8901-2345-def12345abc",
+          "valor": -10000.00,
+          "moeda": "BRL",
+          "descricao": "COMPRA ACAO PETR4",
+          "categoria": "Investimentos",
+          "data_transacao": "2025-08-01T14:30:00Z",
+          "status": "CONFIRMADA"
+        },
+        {
+          "id_transacao": "t8901234-5678-9012-3456-ef12345abcd",
+          "valor": 500.00,
+          "moeda": "BRL",
+          "descricao": "RECEBIMENTO DIVIDENDOS ITSA4",
+          "categoria": "Renda",
+          "data_transacao": "2025-08-05T10:00:00Z",
+          "status": "CONFIRMADA"
+        }
+      ]
+    }
+  ]
+}

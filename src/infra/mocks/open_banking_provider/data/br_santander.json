@@ -1,0 +1,43 @@
+{
+  "id_banco": "santander",
+  "nome_banco": "Santander",
+  "pais": "BRA",
+  "contas": [
+    {
+      "id_conta": "e5f6a7b8-c9d0-1234-5678-90abcdef345",
+      "apelido_conta": "Conta Super",
+      "tipo_conta": "CONTA_CORRENTE",
+      "moeda": "BRL",
+      "saldo": 12345.67,
+      "transacoes": [
+        {
+          "id_transacao": "t7890123-4567-8901-2345-def12345abc",
+          "valor": -55.90,
+          "moeda": "BRL",
+          "descricao": "Uber",
+          "categoria": "Transporte",
+          "data_transacao": "2025-08-03T20:15:00Z",
+          "status": "CONFIRMADA"
+        }
+      ]
+    },
+    {
+      "id_conta": "f6a7b8c9-d0e1-2345-6789-0abcdef4567",
+      "apelido_conta": "Cartão SX",
+      "tipo_conta": "CARTAO_CREDITO",
+      "moeda": "BRL",
+      "saldo": -850.00,
+      "transacoes": [
+        {
+          "id_transacao": "t8901234-5678-9012-3456-ef12345abcd",
+          "valor": -120.00,
+          "moeda": "BRL",
+          "descricao": "Restaurante",
+          "categoria": "Alimentação",
+          "data_transacao": "2025-08-01T21:00:00Z",
+          "status": "CONFIRMADA"
+        }
+      ]
+    }
+  ]
+}

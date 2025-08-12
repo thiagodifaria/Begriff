@@ -1,7 +1,7 @@
 import json
 import os
 from typing import Dict, Any, Union
-from app.config import settings
+from src.app.config import settings
 
 try:
     from google import genai

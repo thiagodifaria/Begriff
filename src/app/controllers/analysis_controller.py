@@ -1,17 +1,18 @@
-from fastapi import APIRouter, Depends, File, UploadFile, HTTPException
+from fastapi import APIRouter, Depends, File, UploadFile, HTTPException, status
 from sqlalchemy.orm import Session
 import csv
 import io
 from typing import List
 
-from infra.persistence.database import get_db
-from domains.identity.dependencies import get_current_user
-from domains.transactions.services import analysis_service
-from infra.persistence import models
-from infra.shared.schemas import analysis_schema
+from src.infra.persistence.database import get_db
+from src.domains.identity.dependencies import get_current_user
+from src.domains.transactions.services import analysis_service
+from src.infra.persistence import models
+from src.infra.shared.schemas import analysis_schema
+from src.infra.persistence.repositories import analysis_repository
 
 
-from domains.edge_computing.orchestrator import EdgeOrchestrator
+from src.domains.edge_computing.orchestrator import EdgeOrchestrator
 
 router = APIRouter()
 
@@ -30,14 +31,13 @@ async def create_analysis(file: UploadFile = File(...), db: Session = Depends(ge
     csv_reader = csv.DictReader(io.StringIO(decoded_content))
     transactions_data = [dict(row) for row in csv_reader]
 
-    # Edge pre-processing step
-    # edge_result = edge_orchestrator.dispatch_preprocessing_task(
-    #     transactions_data=transactions_data,
-    #     user_location="sa-east-1"
-    # )
-    # print(f"Edge pre-processing complete: {edge_result}")  # For now, we'll just print the result
-
-    return await analysis_service.run_comprehensive_analysis(db=db, transactions_data=transactions_data, user=current_user)
+    try:
+        return await analysis_service.run_comprehensive_analysis(db=db, transactions_data=transactions_data, user=current_user)
+    except ConnectionError as e:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=f"Failed to connect to a required service: {e}"
+        )
 
 
 @router.get("/analysis/", response_model=List[analysis_schema.FinancialAnalysis])

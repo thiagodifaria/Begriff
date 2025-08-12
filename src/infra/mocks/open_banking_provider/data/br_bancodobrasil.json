@@ -1,0 +1,25 @@
+{
+  "id_banco": "bancodobrasil",
+  "nome_banco": "Banco do Brasil",
+  "pais": "BRA",
+  "contas": [
+    {
+      "id_conta": "d4e5f6a7-b8c9-0123-4567-890abcdef234",
+      "apelido_conta": "Conta Corrente",
+      "tipo_conta": "CONTA_CORRENTE",
+      "moeda": "BRL",
+      "saldo": 7654.32,
+      "transacoes": [
+        {
+          "id_transacao": "t6f78901-2345-6789-0123-cdef12345ab",
+          "valor": -250.00,
+          "moeda": "BRL",
+          "descricao": "Pagamento de boleto",
+          "categoria": "Contas",
+          "data_transacao": "2025-08-05T16:00:00Z",
+          "status": "CONFIRMADA"
+        }
+      ]
+    }
+  ]
+}

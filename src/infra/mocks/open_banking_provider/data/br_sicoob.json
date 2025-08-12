@@ -1,0 +1,25 @@
+{
+  "id_banco": "sicoob",
+  "nome_banco": "Sicoob",
+  "pais": "BRA",
+  "contas": [
+    {
+      "id_conta": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      "apelido_conta": "Conta Corrente",
+      "tipo_conta": "CONTA_CORRENTE",
+      "moeda": "BRL",
+      "saldo": 6789.10,
+      "transacoes": [
+        {
+          "id_transacao": "tb234567-8901-2345-6789-234567bcdef",
+          "valor": -75.00,
+          "moeda": "BRL",
+          "descricao": "Pagamento de conta de água",
+          "categoria": "Contas",
+          "data_transacao": "2025-08-03T09:00:00Z",
+          "status": "CONFIRMADA"
+        }
+      ]
+    }
+  ]
+}
