@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #fafaf9;
+}
+
+.login-fade-up {
+  animation: login-fade-up 540ms ease-out both;
+}
+
+.login-blob {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 9999px;
+  filter: blur(52px);
+  opacity: 0.28;
+  animation: login-float 9s ease-in-out infinite;
+}
+
+.login-blob-a {
+  width: 320px;
+  height: 320px;
+  left: -90px;
+  top: -80px;
+  background: radial-gradient(circle at 30% 30%, #cfd7e4 0%, #eef1f5 58%, transparent 100%);
+}
+
+.login-blob-b {
+  width: 280px;
+  height: 280px;
+  right: -70px;
+  bottom: -80px;
+  background: radial-gradient(circle at 40% 40%, #d9e7de 0%, #edf4ef 55%, transparent 100%);
+  animation-delay: 1.3s;
+}
+
+@keyframes login-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes login-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0) scale(1.04);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-fade-up,
+  .login-blob {
+    animation: none;
+  }
+}

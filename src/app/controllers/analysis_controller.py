@@ -4,7 +4,7 @@ import csv
 import io
 from typing import List
 
-from src.infra.persistence.database import get_db
+from src.infra.persistence.database import apply_user_rls_context, get_db
 from src.domains.identity.dependencies import get_current_user
 from src.domains.transactions.services import analysis_service
 from src.infra.persistence import models
@@ -23,6 +23,7 @@ router = APIRouter()
 
 @router.post("/analysis/", response_model=analysis_schema.FinancialAnalysis)
 async def create_analysis(file: UploadFile = File(...), db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    apply_user_rls_context(db, current_user.id)
     if file.content_type != 'text/csv':
         raise HTTPException(status_code=400, detail="Invalid file type. Please upload a CSV file.")
 
@@ -42,4 +43,5 @@ async def create_analysis(file: UploadFile = File(...), db: Session = Depends(ge
 
 @router.get("/analysis/", response_model=List[analysis_schema.FinancialAnalysis])
 async def get_analysis_history(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    apply_user_rls_context(db, current_user.id)
     return analysis_service.get_user_analysis_history(db=db, user_id=current_user.id)

@@ -1,17 +1,16 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from src.app.config import settings
 
+
 def get_connect_args():
-    """Retorna connect_args apropriados baseado no tipo de banco"""
     if settings.DATABASE_URL.startswith("sqlite"):
         return {"check_same_thread": False}
-    elif settings.DATABASE_URL.startswith("postgresql"):
-        return {}
-    else:
-        return {}
+    if settings.DATABASE_URL.startswith("postgresql"):
+        return {"sslmode": settings.DATABASE_SSL_MODE}
+    return {}
 
 engine = create_engine(
     settings.DATABASE_URL, 
@@ -28,3 +27,8 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+def apply_user_rls_context(db, user_id: int):
+    if settings.DATABASE_URL.startswith("postgresql"):
+        db.execute(text("SET LOCAL app.current_user_id = :user_id"), {"user_id": str(user_id)})

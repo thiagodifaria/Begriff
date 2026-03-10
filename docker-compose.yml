@@ -17,7 +17,6 @@ services:
     command: ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
     volumes:
       - ./src/domains/risk/models:/app/domains/risk/models
-      
     ports:
       - "8000:8000"
     env_file:
@@ -43,10 +42,7 @@ services:
 
   reconciliation_middleware:
     build:
-      # CORREÇÃO: O contexto foi alterado para a raiz do projeto ('.')
-      # Isso permite que o Dockerfile acesse qualquer arquivo do projeto.
       context: .
-      # CORREÇÃO: O caminho para o Dockerfile agora é o caminho completo a partir da nova raiz de contexto.
       dockerfile: src/domains/middleware/Dockerfile
       target: reconciliation_runtime
     ports:
@@ -56,9 +52,7 @@ services:
 
   crypto_middleware:
     build:
-      # CORREÇÃO: O contexto foi alterado para a raiz do projeto ('.')
       context: .
-      # CORREÇÃO: O caminho para o Dockerfile agora é o caminho completo a partir da nova raiz de contexto.
       dockerfile: src/domains/middleware/Dockerfile
       target: crypto_runtime
     ports:
@@ -80,6 +74,28 @@ services:
     working_dir: /app
     ports:
       - "8545:8545"
+    networks:
+      - begriff_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80"
+    networks:
+      - begriff_network
+
+  reverse_proxy:
+    image: nginx:1.27-alpine
+    volumes:
+      - ./infra/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - api_server
+      - gateway_server
+      - frontend
     networks:
       - begriff_network
 

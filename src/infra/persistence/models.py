@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, JSON, DateTime, Numeric, Date
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, JSON, DateTime, Numeric, Date, Text
 from sqlalchemy.orm import relationship
 import datetime
 
@@ -16,6 +16,9 @@ class User(Base):
     twins = relationship("DigitalTwin", back_populates="owner")
     transactions = relationship("Transaction", back_populates="owner")
     analyses = relationship("FinancialAnalysis", back_populates="owner")
+    ui_settings = relationship("UserUiSetting", back_populates="owner")
+    reports = relationship("GeneratedReport", back_populates="owner")
+    report_schedules = relationship("ReportSchedule", back_populates="owner")
 
 
 from typing import Optional
@@ -59,3 +62,41 @@ class FinancialAnalysis(Base):
     analysis_type = Column(String, nullable=False, index=True)
 
     owner = relationship("User", back_populates="analyses")
+
+
+class UserUiSetting(Base):
+    __tablename__ = "user_ui_settings"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True, unique=True)
+    settings = Column(JSON, nullable=False, default=dict)
+    updated_at = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
+
+    owner = relationship("User", back_populates="ui_settings")
+
+
+class GeneratedReport(Base):
+    __tablename__ = "generated_reports"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    title = Column(String, nullable=False)
+    report_type = Column(String, nullable=False, index=True)
+    content = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow, index=True)
+
+    owner = relationship("User", back_populates="reports")
+
+
+class ReportSchedule(Base):
+    __tablename__ = "report_schedules"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    report_type = Column(String, nullable=False, index=True)
+    frequency = Column(String, nullable=False)
+    recipients = Column(Text, nullable=False)
+    active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow, index=True)
+
+    owner = relationship("User", back_populates="report_schedules")

@@ -1,3 +1,31 @@
 
 # Environment variables
 .env
+.env.local
+
+# Python cache/build
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# Databases and local artifacts
+*.db
+*.sqlite
+*.sqlite3
+data/dev/
+
+# OS/editor artifacts
+.DS_Store
+Thumbs.db
+
+# Node artifacts (frontend)
+frontend/node_modules/
+frontend/dist/

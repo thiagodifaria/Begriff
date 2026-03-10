@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
-from src.infra.persistence.database import get_db
+from src.infra.persistence.database import apply_user_rls_context, get_db
 from src.domains.identity.dependencies import get_current_user
 from src.domains.open_banking.services import sync_service
 from src.infra.persistence.models import User
@@ -50,6 +50,7 @@ async def analyze_banking_data(db: Session = Depends(get_db), current_user: User
     Triggers a new financial analysis from the user's already synchronized banking data.
     """
     try:
+        apply_user_rls_context(db, current_user.id)
         return await analysis_service.run_banking_analysis(db=db, user=current_user)
     except ConnectionError as e:
         raise HTTPException(
@@ -62,4 +63,5 @@ async def get_banking_analysis_history(db: Session = Depends(get_db), current_us
     """
     Retrieves the history of banking-originated financial analyses for the user.
     """
+    apply_user_rls_context(db, current_user.id)
     return analysis_service.get_user_analysis_history_by_type(db=db, user_id=current_user.id, analysis_type='BANKING')
