@@ -78,6 +78,26 @@ docker-compose up --build
 - **📈 Advanced Analytics** - Financial intelligence reporting
 - **🔍 Audit Trail** - SHA-256 digital audit system
 
+## 🌐 Deployment (Netlify + Separate Backend)
+
+The full stack (FastAPI + C++ + COBOL + database) cannot run entirely inside Netlify.  
+Recommended production topology:
+
+- Frontend (React/Vite): Netlify
+- Backend (FastAPI): Render, Railway, Fly.io, VPS, or Docker host
+- Database: managed PostgreSQL
+
+Frontend (Netlify) settings:
+
+- Base directory: `frontend`
+- Build command: `npm ci && npm run build`
+- Publish directory: `dist`
+- Environment variable: `VITE_API_BASE_URL=https://YOUR_BACKEND/api/v1`
+
+Backend environment:
+
+- Set `CORS_ORIGINS=https://your-frontend.netlify.app`
+
 ---
 
 ## 🏗️ Architecture Showcase
@@ -90,7 +110,7 @@ docker-compose up --build
 
 ---
 
-## 🚀 Current Status (v1.5.0)
+## 🚀 Current Status (v2.0.0)
 
 ### ✅ **Solid Foundation Complete**
 - **Hybrid Pipeline**: Fully operational Python → C++ → COBOL flow

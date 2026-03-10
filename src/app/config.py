@@ -7,7 +7,8 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Begriff"
     app_name: str = "Begriff"
-    app_version: str = "1.6.0"
+    app_version: str = "2.0.0"
+    CORS_ORIGINS: str = "http://localhost:5173,http://127.0.0.1:5173"
 
     DATABASE_URL: Optional[str] = None
     DATABASE_SSL_MODE: str = "require"
@@ -79,6 +80,15 @@ class Settings(BaseSettings):
             or "docker" in os.getenv("HOSTNAME", "").lower()
             or os.getenv("CONTAINER_ENV") == "docker"
         )
+
+    @property
+    def cors_origins_list(self):
+        raw = (self.CORS_ORIGINS or "").strip()
+        if not raw:
+            return []
+        if raw == "*":
+            return ["*"]
+        return [origin.strip() for origin in raw.split(",") if origin.strip()]
 
 
 settings = Settings()

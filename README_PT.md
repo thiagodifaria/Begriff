@@ -28,7 +28,7 @@ Begriff é uma plataforma empresarial completa de inteligência financeira, cuja
 
 ## 🚀 Funcionalidades Avançadas
 
-### ✅ Funcionalidades Implementadas (V1.5.0)
+### ✅ Funcionalidades Implementadas (V2.0.0)
 
 - ✅ **Pipeline Híbrido Completo**: Fluxo end-to-end Python → C++ → COBOL 100% operacional
 - ✅ **Sistema de Identidade Seguro**: Autenticação JWT com bcrypt e proteção de rotas
@@ -79,7 +79,7 @@ Begriff é uma plataforma empresarial completa de inteligência financeira, cuja
 
 ## 📊 Capacidades de Análise Avançada
 
-### Gêmeos Digitais Funcionais (Implementado v1.5.0)
+### Gêmeos Digitais Funcionais (Implementado v2.0.0)
 ```
 Simulação Monte Carlo Real:
 ├─ Engine: NumPy nativo para performance
@@ -298,6 +298,41 @@ python src/app/main.py
 
 ## ⚙️ Configuração
 
+## 🌐 Deploy (Netlify + Backend Separado)
+
+O projeto completo (FastAPI + C++ + COBOL + banco) **nao roda 100% dentro do Netlify**.  
+Use esta arquitetura:
+
+- Frontend React/Vite: Netlify
+- Backend FastAPI: Render, Railway, Fly.io, VPS ou Docker host
+- Banco de dados: PostgreSQL gerenciado
+
+### Passos no Netlify (frontend)
+
+```bash
+cd frontend
+npm ci
+npm run build
+```
+
+No painel do Netlify:
+
+- Build base directory: `frontend`
+- Build command: `npm ci && npm run build`
+- Publish directory: `dist`
+- Environment variable: `VITE_API_BASE_URL=https://SEU_BACKEND/api/v1`
+
+### Passos no backend
+
+- Configure CORS com o dominio do Netlify via `CORS_ORIGINS`
+- Exemplo:
+
+```env
+CORS_ORIGINS=https://seu-front.netlify.app
+```
+
+- Suba o backend em um provedor que aceite processo Python persistente + banco
+
 ### Variáveis de Ambiente
 
 Crie um arquivo `.env` na raiz do projeto:
@@ -305,7 +340,7 @@ Crie um arquivo `.env` na raiz do projeto:
 ```env
 # Configurações da aplicação
 APP_NAME=Begriff
-APP_VERSION=1.5.0
+APP_VERSION=2.0.0
 DEBUG=True
 
 # Configurações do banco de dados
@@ -516,11 +551,11 @@ services:
 
 ## 🔄 Roadmap de Desenvolvimento
 
-## 🎯 Estado Atual do Projeto (v1.5.0)
+## 🎯 Estado Atual do Projeto (v2.0.0)
 
 O Begriff é atualmente um **backend robusto, funcional e arquiteturalmente validado**. A fase de construção da fundação foi concluída e o sistema passou por um rigoroso processo de análise, refatoração e correção que solidificou sua estrutura e eliminou falhas críticas.
 
-### Conquistas Técnicas v1.5.0
+### Conquistas Técnicas v2.0.0
 
 #### 🚀 Pipeline Híbrido Refatorado
 - **Arquitetura de Pipes**: Eliminação completa de I/O de disco entre C++ e COBOL
@@ -569,7 +604,7 @@ O Begriff é atualmente um **backend robusto, funcional e arquiteturalmente vali
 
 ## 📈 Performance
 
-### Métricas Atuais (V1.5.0)
+### Métricas Atuais (V2.0.0)
 
 ```
 Pipeline Híbrido:
@@ -579,7 +614,7 @@ Pipeline Híbrido:
 └─ Disponibilidade: 99.9%
 
 Detecção de Fraude:
-├─ Precisão: 95%+ (V1.5.0)
+├─ Precisão: 95%+ (V2.0.0)
 ├─ Tempo de Resposta: <10ms
 ├─ False Positives: <2%
 └─ Target V2.0: 98%+ precisão

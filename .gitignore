@@ -29,3 +29,6 @@ Thumbs.db
 # Node artifacts (frontend)
 frontend/node_modules/
 frontend/dist/
+
+# Local Netlify folder
+.netlify

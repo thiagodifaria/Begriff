@@ -1,6 +1,7 @@
 import os
 
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from src.app.config import settings
@@ -13,6 +14,13 @@ from src.infra.persistence.database import Base, SessionLocal, engine
 
 app = FastAPI(title=settings.PROJECT_NAME)
 app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins_list or ["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.on_event("startup")

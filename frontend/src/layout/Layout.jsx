@@ -162,7 +162,19 @@ export default function Layout({
               <LogOut size={14} />
             </button>
           </div>
-          {!isCompact ? <div className="text-[10px] text-gray-400 font-mono">v1.6.0-stable</div> : null}
+          {!isCompact ? (
+            <div className="space-y-1">
+              <div className="text-[10px] text-gray-400 font-mono">v2.0.0</div>
+              <a
+                href="https://github.com/thiagodifaria"
+                target="_blank"
+                rel="noreferrer"
+                className="text-[10px] text-gray-500 hover:text-gray-900"
+              >
+                By Thiago Di Faria
+              </a>
+            </div>
+          ) : null}
         </div>
       </aside>
 
