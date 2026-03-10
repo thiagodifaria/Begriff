@@ -47,7 +47,29 @@ Begriff is an **enterprise financial intelligence platform** that demonstrates h
 
 ---
 
+## 🌐 **Live Demo**
+
+**Frontend:** [https://begriffdifaria.netlify.app/](https://begriffdifaria.netlify.app/)  
+**Backend API:** [https://begriff-api.onrender.com/docs](https://begriff-api.onrender.com/docs)
+
+**Test Credentials:**
+- **Username:** `admin`
+- **Password:** `admin`
+
+*The frontend is live on Netlify and connected to the FastAPI backend hosted on Render.*
+
+---
+
 ## ⚡ Quick Start
+
+### Option 1: View Online
+```bash
+# Frontend
+https://begriffdifaria.netlify.app/
+
+# API docs
+https://begriff-api.onrender.com/docs
+```
 
 ### Prerequisites
 ```bash
@@ -153,6 +175,8 @@ Backend environment:
 **Thiago Di Faria** - thiagodifaria@gmail.com
 
 [![GitHub](https://img.shields.io/badge/GitHub-@thiagodifaria-black?style=flat&logo=github)](https://github.com/thiagodifaria)
+
+**Project Link:** [https://github.com/thiagodifaria/Begriff](https://github.com/thiagodifaria/Begriff)
 
 ---
 

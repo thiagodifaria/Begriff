@@ -2,6 +2,24 @@
 
 Begriff é uma plataforma empresarial completa de inteligência financeira, cuja missão é demonstrar a modernização de sistemas legados através de uma arquitetura híbrida inteligente. O projeto ataca um dos maiores desafios do mundo corporativo: como inovar sobre as mais de 800 bilhões de linhas de código COBOL que ainda sustentam 43% das transações bancárias globais, sem descartar décadas de investimento e lógica de negócios consolidada. O resultado é um ecossistema coeso que une a confiabilidade do passado com a inteligência do futuro, criando uma sinfonia tecnológica de alta performance onde cada camada desempenha um papel hiperespecializado. A arquitetura segue rigorosamente os princípios de Clean Architecture e Domain-Driven Design (DDD), garantindo modularidade, escalabilidade e manutenibilidade empresarial com uma clara separação de responsabilidades entre domínios especializados.
 
+## 🌐 Demo Online
+
+**Acesse o frontend em tempo real**: [https://begriffdifaria.netlify.app/](https://begriffdifaria.netlify.app/)
+
+**Acesse a documentação da API**: [https://begriff-api.onrender.com/docs](https://begriff-api.onrender.com/docs)
+
+A aplicação já pode ser testada online, com o frontend React hospedado no Netlify e o backend FastAPI hospedado no Render. Isso permite validar a interface e os endpoints reais sem depender de ambiente local.
+
+## 🔐 Credenciais para Teste
+
+Utilize as credenciais padrão abaixo para acessar a aplicação publicada:
+
+| **Usuário** | **Senha** | **Acesso** |
+|-------------|-----------|------------|
+| `admin` | `admin` | Usuário administrador padrão |
+
+> **Dica**: Você pode usar o frontend publicado no Netlify e, ao mesmo tempo, inspecionar os endpoints reais pela documentação Swagger no Render.
+
 ## 🏗️ Arquitetura Híbrida Sinérgica
 
 ### O Coração Industrial (Núcleo de Processamento Crítico COBOL)
@@ -256,6 +274,16 @@ begriff/
 - SQLite 3.40+ (incluído no Python 3.11+)
 
 ## 🚀 Instalação
+
+### Opção 1: Testar Online
+
+```bash
+# Frontend
+https://begriffdifaria.netlify.app/
+
+# Documentação da API
+https://begriff-api.onrender.com/docs
+```
 
 ### Instalação com Docker (Recomendada)
 
@@ -645,6 +673,7 @@ Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICE
 
 - **Email**: thiagodifaria@gmail.com
 - **Documentação**: [docs.begriff.com](https://docs.begriff.com)
+- **Link do Projeto**: [https://github.com/thiagodifaria/Begriff](https://github.com/thiagodifaria/Begriff)
 ---
 
 **Begriff** - Transformando o legado em inteligência financeira do futuro 🚀

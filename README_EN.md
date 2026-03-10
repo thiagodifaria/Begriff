@@ -2,6 +2,24 @@
 
 Begriff is a comprehensive enterprise financial intelligence platform whose mission is to demonstrate the modernization of legacy systems through intelligent hybrid architecture. The project tackles one of the biggest challenges in the corporate world: how to innovate over the more than 800 billion lines of COBOL code that still support 43% of global banking transactions, without discarding decades of investment and consolidated business logic. The result is a cohesive ecosystem that unites the reliability of the past with the intelligence of the future, creating a high-performance technological symphony where each layer plays a hyperspecialized role. The architecture rigorously follows Clean Architecture and Domain-Driven Design (DDD) principles, ensuring modularity, scalability, and enterprise maintainability with clear separation of responsibilities between specialized domains.
 
+## 🌐 Online Demo
+
+**Access the frontend live**: [https://begriffdifaria.netlify.app/](https://begriffdifaria.netlify.app/)
+
+**Access the API docs**: [https://begriff-api.onrender.com/docs](https://begriff-api.onrender.com/docs)
+
+The application is publicly available online with the React frontend hosted on Netlify and the FastAPI backend hosted on Render. This lets you test the interface and the live backend without running the project locally.
+
+## 🔐 Test Credentials
+
+Use the default credentials below to access the live application:
+
+| **Username** | **Password** | **Access** |
+|--------------|--------------|------------|
+| `admin` | `admin` | Default administrator user |
+
+> **Tip**: You can test the UI through Netlify and inspect the backend endpoints directly through the Swagger docs on Render.
+
 ## 🏗️ Synergistic Hybrid Architecture
 
 ### The Industrial Heart (COBOL Critical Processing Core)
@@ -256,6 +274,16 @@ begriff/
 - SQLite 3.40+ (included in Python 3.11+)
 
 ## 🚀 Installation
+
+### Option 1: Test Online
+
+```bash
+# Frontend
+https://begriffdifaria.netlify.app/
+
+# API documentation
+https://begriff-api.onrender.com/docs
+```
 
 ### Docker Installation (Recommended)
 
@@ -610,6 +638,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Email**: thiagodifaria@gmail.com
 - **Documentation**: [docs.begriff.com](https://docs.begriff.com)
+- **Project Link**: [https://github.com/thiagodifaria/Begriff](https://github.com/thiagodifaria/Begriff)
 ---
 
 **Begriff** - Transforming legacy into financial intelligence of the future 🚀
