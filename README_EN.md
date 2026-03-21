@@ -57,17 +57,6 @@ Use the default credentials below to access the live application:
 - ✅ **High Performance**: SQLite in WAL mode for concurrent writes/reads
 - ✅ **Containerization**: Complete orchestration via docker-compose
 
-### 🔮 Planned Features (Roadmap)
-
-- 🔄 **Advanced Digital Twins**: Monte Carlo simulations (10,000+ scenarios per analysis)
-- 🔄 **Generative AI (Gemini 2.5 Pro)**: Personalized consulting with adaptive language
-- 🔄 **Advanced ML Ensemble**: Isolation Forest + Autoencoders + LSTM for fraud detection (98% precision)
-- 🔄 **Private Blockchain**: Immutable audit with Smart Contracts and Zero-knowledge proofs
-- 🔄 **Open Banking**: Native integration with 15+ Brazilian banks
-- 🔄 **Post-Quantum Cryptography**: Kyber and Dilithium algorithms for future security
-- 🔄 **React Interface**: Responsive and interactive dashboard
-- 🔄 **Edge Computing**: Distributed processing for ultra-low latency
-
 ## 🔧 Technology Stack
 
 ### Backend Core
@@ -367,7 +356,7 @@ MONTE_CARLO_ENGINE=numpy
 MONTE_CARLO_SIMULATIONS=10000
 DIGITAL_TWINS_ENABLED=True
 
-# Future settings (for next versions)
+# Optional advanced settings
 GEMINI_API_KEY=your_gemini_key_here
 BLOCKCHAIN_NETWORK=polygon_mumbai
 OPEN_BANKING_ENABLED=False
@@ -461,7 +450,7 @@ python -m pytest tests/domains/identity/test_auth_service.py
 python -m pytest tests/integration/
 ```
 
-### Planned Test Structure
+### Test Structure
 
 ```
 tests/
@@ -542,8 +531,6 @@ services:
           cpus: '0.5'
 ```
 
-## 🔄 Development Roadmap
-
 ## 🎯 Current Project Status (v2.0.0)
 
 Begriff is currently a **robust, functional, and architecturally validated backend**. The foundation building phase has been completed and the system has undergone a rigorous analysis, refactoring, and correction process that solidified its structure and eliminated critical flaws.
@@ -602,13 +589,6 @@ Fraud Detection:
 - **Input Validation**: Input data sanitization
 - **Rate Limiting**: DDoS attack protection
 - **HTTPS Only**: Encrypted communication
-
-### Planned Measures
-
-- **Post-Quantum Cryptography**: Kyber and Dilithium algorithms
-- **Zero-Knowledge Proofs**: Privacy in blockchain auditing
-- **Multi-Factor Authentication**: Additional security layer
-- **Security Auditing**: Immutable security logs
 
 ## 📜 License
 

@@ -57,17 +57,6 @@ Utilize as credenciais padrão abaixo para acessar a aplicação publicada:
 - ✅ **Alta Performance**: SQLite em modo WAL para escritas/leituras concorrentes
 - ✅ **Containerização**: Orquestração completa via docker-compose
 
-### 🔮 Funcionalidades Planejadas (Roadmap)
-
-- 🔄 **Gêmeos Digitais Avançados**: Simulações Monte Carlo (10.000+ cenários por análise)
-- 🔄 **IA Generativa (Gemini 2.5 Pro)**: Consultoria personalizada com linguagem adaptativa
-- 🔄 **ML Ensemble Avançado**: Isolation Forest + Autoencoders + LSTM para detecção de fraudes (98% precisão)
-- 🔄 **Blockchain Privada**: Auditoria imutável com Smart Contracts e Zero-knowledge proofs
-- 🔄 **Open Banking**: Integração nativa com 15+ bancos brasileiros
-- 🔄 **Criptografia Pós-Quântica**: Algoritmos Kyber e Dilithium para segurança futura
-- 🔄 **Interface React**: Dashboard responsivo e interativo
-- 🔄 **Edge Computing**: Processamento distribuído para ultra-baixa latência
-
 ## 🔧 Stack Tecnológica
 
 ### Backend Core
@@ -496,7 +485,7 @@ python -m pytest tests/domains/identity/test_auth_service.py
 python -m pytest tests/integration/
 ```
 
-### Estrutura de Testes Planejada
+### Estrutura de Testes
 
 ```
 tests/
@@ -577,8 +566,6 @@ services:
           cpus: '0.5'
 ```
 
-## 🔄 Roadmap de Desenvolvimento
-
 ## 🎯 Estado Atual do Projeto (v2.0.0)
 
 O Begriff é atualmente um **backend robusto, funcional e arquiteturalmente validado**. A fase de construção da fundação foi concluída e o sistema passou por um rigoroso processo de análise, refatoração e correção que solidificou sua estrutura e eliminou falhas críticas.
@@ -637,13 +624,6 @@ Detecção de Fraude:
 - **Validação de Input**: Sanitização de dados de entrada
 - **Rate Limiting**: Proteção contra ataques DDoS
 - **HTTPS Only**: Comunicação criptografada
-
-### Medidas Planejadas
-
-- **Criptografia Pós-Quântica**: Algoritmos Kyber e Dilithium
-- **Zero-Knowledge Proofs**: Privacidade em auditoria blockchain
-- **Multi-Factor Authentication**: Camada adicional de segurança
-- **Security Auditing**: Logs imutáveis de segurança
 
 ## 📜 Licença
 
